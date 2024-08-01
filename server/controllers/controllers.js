@@ -12,7 +12,6 @@ const getEvents = async (req, res) => {
   }
 };
 
-// GET EVENTS by place_id
 
 const getEventsbyPark = async (req, res) => {
   try {
