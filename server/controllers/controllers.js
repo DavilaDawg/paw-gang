@@ -27,8 +27,6 @@ const getEventsbyPark = async (req, res) => {
   }
 };
 
-// GET EVENTS by user
-
 const getEventsbyUser = async (req, res) => {
   try {
     const { user } = req.params; 
