@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
