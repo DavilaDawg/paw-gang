@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const moment = require('moment-timezone');
+import mongoose from 'mongoose';
+import moment from 'moment-timezone';
 
 const { Schema } = mongoose;
 
@@ -12,15 +12,15 @@ const events = new Schema({
   date: {
     type: Date,
     required: true,
-    set: (date) => moment.tz(date, 'Europe/Madrid').toDate(),
-    get: (date) => moment(date).tz('Europe/Madrid').format(),
+    set: (date: Date) => moment.tz(date, 'Europe/Madrid').toDate(),
+    get: (date: Date) => moment(date).tz('Europe/Madrid').format()
   },
   user: { type: String, required: true },
-  dog_avatar: { type: String, required: true },
+  dog_avatar: { type: String, required: true }
 });
 
 events.set('toJSON', { getters: true });
 
 const Events = mongoose.model('Events', events);
 
-module.exports = Events;
+export default Events;
