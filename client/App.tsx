@@ -22,7 +22,7 @@ const LogoHeader: React.FC = () => {
   );
 };
 
-const SearchStack: React.FC = () => {
+const SearchStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -89,7 +89,7 @@ const MainTabs: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
+export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -98,7 +98,7 @@ const App: React.FC = () => {
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -118,5 +118,3 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
-
-export default App;
