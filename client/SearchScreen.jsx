@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable camelcase */
 import { useState } from 'react';
 import {
   StyleSheet,
@@ -9,7 +7,7 @@ import {
   Image,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
 import axios from 'axios';
 import Constants from 'expo-constants';
@@ -27,7 +25,7 @@ function SearchScreen() {
   const navigation = useNavigation();
   const apiKey = Constants.expoConfig.extra.googleMapsApiKey;
 
-  const fetchDogParks = async (location) => {
+  const fetchDogParks = async location => {
     if (location.trim() === '') {
       setDogParks([]);
       return;
@@ -37,7 +35,7 @@ function SearchScreen() {
     setError(null);
     try {
       const geocodeResponse = await axios.get(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`,
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
       );
 
       const geocodeResults = geocodeResponse.data.results;
@@ -45,7 +43,7 @@ function SearchScreen() {
         const { lat, lng } = geocodeResults[0].geometry.location;
 
         const placesResponse = await axios.get(
-          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=park&keyword=dog%20park&key=${apiKey}`,
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&type=park&keyword=dog%20park&key=${apiKey}`
         );
 
         setDogParks(placesResponse.data.results || []);
@@ -60,7 +58,7 @@ function SearchScreen() {
     }
   };
 
-  const getPhotoUrl = (photoReference) => {
+  const getPhotoUrl = photoReference => {
     return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
   };
 
@@ -84,7 +82,7 @@ function SearchScreen() {
       const { latitude, longitude } = location.coords;
 
       const placesResponse = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=5000&type=park&keyword=dog%20park&key=${apiKey}`,
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=5000&type=park&keyword=dog%20park&key=${apiKey}`
       );
 
       setDogParks(placesResponse.data.results || []);
@@ -108,7 +106,7 @@ function SearchScreen() {
           placeholder="Enter location..."
           placeholderTextColor="#9DA2AB"
           value={locationInput}
-          onChangeText={(text) => setLocationInput(text)}
+          onChangeText={text => setLocationInput(text)}
         />
         <TouchableOpacity style={styles.button} onPress={handleLocationSubmit}>
           <Icon name="search" size={24} color="#fff" />
@@ -125,7 +123,7 @@ function SearchScreen() {
       {error && <Text style={styles.errorText}>Error: {error}</Text>}
       <FlatList
         data={dogParks}
-        keyExtractor={(item) => item.place_id}
+        keyExtractor={item => item.place_id}
         renderItem={({ item }) => (
           <View style={styles.parkItem}>
             <Text style={styles.parkName}>{item.name}</Text>
@@ -159,16 +157,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     marginLeft: 10,
-    padding: 10,
+    padding: 10
   },
   container: {
     backgroundColor: '#333',
-    flex: 1,
+    flex: 1
   },
   errorText: {
     color: 'red',
     marginBottom: 20,
-    marginLeft: 20,
+    marginLeft: 20
   },
   input: {
     borderColor: 'gray',
@@ -176,42 +174,42 @@ const styles = StyleSheet.create({
     color: '#f9f9f9',
     flex: 1,
     height: 40,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   inputContainer: {
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: 20,
-    marginHorizontal: 20,
+    marginHorizontal: 20
   },
   label: {
     color: '#f9f9f9',
     fontSize: 18,
     fontWeight: 'bold',
     marginLeft: 20,
-    marginVertical: 20,
+    marginVertical: 20
   },
   loaderContainer: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   parkImage: {
     borderRadius: 5,
     height: 200,
     marginBottom: 10,
     objectFit: 'cover',
-    width: '100%',
+    width: '100%'
   },
   parkItem: {
     backgroundColor: '#f9f9f9',
     borderRadius: 5,
     marginBottom: 20,
     marginHorizontal: 20,
-    padding: 10,
+    padding: 10
   },
   parkName: {
     fontSize: 18,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
