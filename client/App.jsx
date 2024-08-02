@@ -1,10 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-unused-styles */
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable react/no-unstable-nested-components */
-/* eslint-disable global-require */
-import { View, Image, StyleSheet} from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -35,7 +29,11 @@ function SearchStack() {
         component={SearchScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ParkSchedule" component={ParkSchedule} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ParkSchedule"
+        component={ParkSchedule}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -67,7 +65,7 @@ function MainTabs() {
           },
           tabBarActiveTintColor: '#008CBA',
           tabBarInactiveTintColor: 'gray',
-          headerShown: false,
+          headerShown: false
         })}
       >
         <Tab.Screen
@@ -104,18 +102,18 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#333',
-    flex: 1,
+    flex: 1
   },
   logo: {
     height: 75,
     resizeMode: 'contain',
-    width: 150,
+    width: 150
   },
   logoDiv: {
     alignItems: 'center',
     backgroundColor: '#cfcec9',
     padding: 10,
     paddingTop: Constants.statusBarHeight,
-    width: '100%',
-  },
+    width: '100%'
+  }
 });

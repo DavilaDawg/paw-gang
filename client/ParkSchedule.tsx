@@ -16,6 +16,25 @@ import axios from 'axios';
 
 const SERVER_URL = 'http://192.168.1.103:3000';
 
+type Event = {
+  _id: string;
+  place_id: string;
+  park_name: string;
+  address: string;
+  date: string;
+  user: string;
+  dog_avatar: string;
+};
+type ParkScheduleProps = {
+  route: {
+    params: {
+      place_id: string;
+      name: string;
+      vicinity: string;
+    };
+  };
+};
+
 function ParkSchedule({ route }) {
   const { place_id, name, vicinity } = route.params;
   const [selectedDate, setSelectedDate] = useState(

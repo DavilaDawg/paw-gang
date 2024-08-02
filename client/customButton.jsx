@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-color-literals */
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
 function CustomButton({ onPress, title }) {
@@ -16,13 +15,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 10,
     paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   buttonText: {
     color: '#ffffff',
     fontSize: 16,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
 
 export default CustomButton;
