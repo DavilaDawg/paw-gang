@@ -1,4 +1,4 @@
-import models from '../models/events.js';
+import models from '../models/events';
 import { Request, Response } from 'express';
 
 interface Event {
