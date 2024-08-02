@@ -1,4 +1,4 @@
-import models from '../models/events.js';
+import models from '../models/events';
 import { Request, Response } from 'express';
 
 interface Event {
@@ -10,7 +10,6 @@ interface Event {
   dog_avatar: string;
 }
 
-// GET EVENTS (I don't need this one but i am having it for thunderclient testing purposes)
 export const getEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const events: Event[] = await models.find();
@@ -20,7 +19,10 @@ export const getEvents = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getEventsbyPark = async (req: Request, res: Response): Promise<void> => {
+export const getEventsbyPark = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { place_id } = req.params;
 
@@ -35,7 +37,10 @@ export const getEventsbyPark = async (req: Request, res: Response): Promise<void
   }
 };
 
-export const getEventsbyUser = async (req: Request, res: Response): Promise<void> => {
+export const getEventsbyUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { user } = req.params;
     if (!user) {
@@ -59,7 +64,7 @@ export const postEvents = async (
     if (!place_id || !park_name || !address || !date || !user || !dog_avatar) {
       res.status(400).json({ error: 'Missing required parameters.' });
     }
-    const newEvent : Event = await models.create({
+    const newEvent: Event = await models.create({
       place_id,
       park_name,
       address,
@@ -75,7 +80,10 @@ export const postEvents = async (
   }
 };
 
-export const deleteEvent = async (req: Request, res: Response): Promise<void>=> {
+export const deleteEvent = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { _id } = req.params;
 
@@ -83,7 +91,7 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void>=> 
       res.status(400).json({ message: '_id is required' });
     }
 
-    const deletedEvent : Event | null = await models.findByIdAndDelete(_id);
+    const deletedEvent: Event | null = await models.findByIdAndDelete(_id);
 
     if (!deletedEvent) {
       res.status(404).json({ message: 'Event not found' });
@@ -94,13 +102,10 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void>=> 
       .json({ message: 'Event deleted successfully', deletedEvent });
   } catch (error) {
     console.error('Error deleting event:', error);
-    res
-      .status(500)
-      .json({ message: 'Internal Server Error', error: error.message });
+    res.status(500).json({ message: 'Internal Server Error', error });
   }
 };
 
-//EDIT EVENT only the date
 export const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { _id } = req.params;
