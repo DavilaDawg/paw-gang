@@ -30,7 +30,11 @@ const SearchStack: React.FC = () => {
         component={SearchScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="ParkSchedule" component={ParkSchedule} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ParkSchedule"
+        component={ParkSchedule}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }
@@ -63,7 +67,7 @@ const MainTabs: React.FC = () => {
           },
           tabBarActiveTintColor: '#008CBA',
           tabBarInactiveTintColor: 'gray',
-          headerShown: false,
+          headerShown: false
         })}
       >
         <Tab.Screen
@@ -100,12 +104,12 @@ const App: React.FC = () =>{
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#333',
-    flex: 1,
+    flex: 1
   },
   logo: {
     height: 75,
     resizeMode: 'contain',
-    width: 150,
+    width: 150
   },
   logoDiv: {
     alignItems: 'center',
