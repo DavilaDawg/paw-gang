@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import SearchScreen from './SearchScreen.tsx';
+import SearchScreen from './SearchScreen';
 import PlanScreen from './PlanScreen';
 import ParkSchedule from './ParkSchedule';
 import Login from './Login';
@@ -22,7 +22,7 @@ const LogoHeader: React.FC = () => {
   );
 };
 
-const SearchStack: React.FC = () => {
+const SearchStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
