@@ -16,7 +16,7 @@ import axios from 'axios';
 
 const SERVER_URL = 'http://192.168.1.103:3000';
 
-interface ParkScheduleProps {
+type ParkScheduleProps = {
   route: {
     params: {
       place_id: string;
@@ -24,9 +24,9 @@ interface ParkScheduleProps {
       vicinity: string;
     };
   };
-}
+};
 
-interface Event {
+type Event = {
   _id: string;
   place_id: string;
   park_name: string;
@@ -34,7 +34,7 @@ interface Event {
   date: string;
   user: string;
   dog_avatar: string;
-}
+};
 
 function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
   const { place_id, name, vicinity } = route.params;
