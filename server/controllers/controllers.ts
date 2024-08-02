@@ -101,17 +101,17 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void>=> 
 };
 
 //EDIT EVENT only the date
-export const editEvent = async (req: Request, res: Response) => {
+export const editEvent = async (req: Request, res: Response): Promise<void> => {
   try {
     const { _id } = req.params;
     const { date } = req.body;
 
     if (!_id) {
-      return res.status(400).json({ message: '_id is required' });
+      res.status(400).json({ message: '_id is required' });
     }
 
     if (!date) {
-      return res.status(400).json({ message: 'date is required for updating' });
+      res.status(400).json({ message: 'date is required for updating' });
     }
 
     const updatedEvent: Event | null = await models.findByIdAndUpdate(
@@ -121,7 +121,7 @@ export const editEvent = async (req: Request, res: Response) => {
     );
 
     if (!updatedEvent) {
-      return res.status(404).json({ message: 'Event not found' });
+      res.status(404).json({ message: 'Event not found' });
     }
 
     res
