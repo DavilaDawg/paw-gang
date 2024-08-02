@@ -11,7 +11,7 @@ interface Event {
 }
 
 // GET EVENTS (I don't need this one but i am having it for thunderclient testing purposes)
-const getEvents = async (req: Request, res: Response): Promise<void> => {
+export const getEvents = async (req: Request, res: Response): Promise<void> => {
   try {
     const events: Event[] = await models.find();
     res.status(200).json(events);
@@ -20,7 +20,7 @@ const getEvents = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getEventsbyPark = async (req: Request, res: Response): Promise<void> => {
+export const getEventsbyPark = async (req: Request, res: Response): Promise<void> => {
   try {
     const { place_id } = req.params;
 
@@ -35,7 +35,7 @@ const getEventsbyPark = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const getEventsbyUser = async (req: Request, res: Response): Promise<void> => {
+export const getEventsbyUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const { user } = req.params;
     if (!user) {
@@ -49,7 +49,7 @@ const getEventsbyUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-const postEvents = async (
+export const postEvents = async (
   req: Request<{}, {}, Event>,
   res: Response
 ): Promise<void> => {
@@ -59,7 +59,7 @@ const postEvents = async (
     if (!place_id || !park_name || !address || !date || !user || !dog_avatar) {
       res.status(400).json({ error: 'Missing required parameters.' });
     }
-    const newEvent = await models.create({
+    const newEvent : Event = await models.create({
       place_id,
       park_name,
       address,
@@ -75,18 +75,18 @@ const postEvents = async (
   }
 };
 
-const deleteEvent = async (req, res) => {
+export const deleteEvent = async (req: Request, res: Response): Promise<void>=> {
   try {
     const { _id } = req.params;
 
     if (!_id) {
-      return res.status(400).json({ message: '_id is required' });
+      res.status(400).json({ message: '_id is required' });
     }
 
-    const deletedEvent = await models.findByIdAndDelete(_id);
+    const deletedEvent : Event | null = await models.findByIdAndDelete(_id);
 
     if (!deletedEvent) {
-      return res.status(404).json({ message: 'Event not found' });
+      res.status(404).json({ message: 'Event not found' });
     }
 
     res
@@ -101,8 +101,7 @@ const deleteEvent = async (req, res) => {
 };
 
 //EDIT EVENT only the date
-
-const editEvent = async (req, res) => {
+export const editEvent = async (req: Request, res: Response) => {
   try {
     const { _id } = req.params;
     const { date } = req.body;
@@ -115,7 +114,7 @@ const editEvent = async (req, res) => {
       return res.status(400).json({ message: 'date is required for updating' });
     }
 
-    const updatedEvent = await models.findByIdAndUpdate(
+    const updatedEvent: Event | null = await models.findByIdAndUpdate(
       _id,
       { date },
       { new: true, runValidators: true }
@@ -133,12 +132,3 @@ const editEvent = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
-
-module.exports = {
-  getEventsbyPark,
-  getEventsbyUser,
-  getEvents,
-  postEvents,
-  deleteEvent,
-  editEvent
-}; // exporting the functions to be used in the router
