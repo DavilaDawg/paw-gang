@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,16 +16,7 @@ import axios from 'axios';
 
 const SERVER_URL = 'http://192.168.1.103:3000';
 
-type Event = {
-  _id: string;
-  place_id: string;
-  park_name: string;
-  address: string;
-  date: string;
-  user: string;
-  dog_avatar: string;
-};
-type ParkScheduleProps = {
+interface ParkScheduleProps {
   route: {
     params: {
       place_id: string;
@@ -33,14 +24,24 @@ type ParkScheduleProps = {
       vicinity: string;
     };
   };
-};
+}
 
-function ParkSchedule({ route }) {
+interface Event {
+  _id: string;
+  place_id: string;
+  park_name: string;
+  address: string;
+  date: string;
+  user: string;
+  dog_avatar: string;
+}
+
+function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
   const { place_id, name, vicinity } = route.params;
   const [selectedDate, setSelectedDate] = useState(
     moment().tz('Europe/Madrid')
   );
-  const [events, setEvents] = useState({});
+  const [events, setEvents] = useState<Record<string, Event[]>>({});
   const [modalVisible, setModalVisible] = useState(false);
   const [newEventDate, setNewEventDate] = useState('');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
@@ -49,20 +50,23 @@ function ParkSchedule({ route }) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.get<Event[]>(
           `${SERVER_URL}/events/park/${place_id}`
         );
         const data = response.data;
-        const formattedEvents = data.reduce((acc, event) => {
-          const dateKey = moment(event.date)
-            .tz('Europe/Madrid')
-            .format('YYYY-MM-DD');
-          if (!acc[dateKey]) {
-            acc[dateKey] = [];
-          }
-          acc[dateKey].push(event);
-          return acc;
-        }, {});
+        const formattedEvents = data.reduce<Record<string, Event[]>>(
+          (acc, event) => {
+            const dateKey = moment(event.date)
+              .tz('Europe/Madrid')
+              .format('YYYY-MM-DD');
+            if (!acc[dateKey]) {
+              acc[dateKey] = [];
+            }
+            acc[dateKey].push(event);
+            return acc;
+          },
+          {}
+        );
         setEvents(formattedEvents);
       } catch (error) {
         console.error('Error fetching events:', error);
@@ -96,7 +100,7 @@ function ParkSchedule({ route }) {
       )
       .toISOString();
 
-    const eventToAdd = {
+    const eventToAdd: Omit<Event, '_id'> = {
       place_id,
       park_name: name,
       address: vicinity,
@@ -112,7 +116,7 @@ function ParkSchedule({ route }) {
       const dateKey = selectedDate.format('YYYY-MM-DD');
       setEvents(prevEvents => ({
         ...prevEvents,
-        [dateKey]: [...(prevEvents[dateKey] || []), eventToAdd]
+        [dateKey]: [...(prevEvents[dateKey] || []), eventToAdd as Event]
       }));
 
       setModalVisible(false);
@@ -123,13 +127,13 @@ function ParkSchedule({ route }) {
     }
   };
 
-  const renderEvent = ({ item }) => (
+  const renderEvent = ({ item }: { item: Event }) => (
     <View style={styles.event}>
       <Image source={{ uri: item.dog_avatar }} style={styles.dogAvatar} />
     </View>
   );
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({ item }: { item: string }) => {
     const dayEvents = events[selectedDate.format('YYYY-MM-DD')] || [];
     const slotEvents = dayEvents.filter(event =>
       moment(event.date)
@@ -167,7 +171,7 @@ function ParkSchedule({ route }) {
     setTimePickerVisibility(false);
   };
 
-  const handleConfirm = time => {
+  const handleConfirm = (time: Date) => {
     const formattedTime = moment(time)
       .tz('Europe/Madrid')
       .minute(0)
@@ -217,7 +221,7 @@ function ParkSchedule({ route }) {
             mode="time"
             onConfirm={handleConfirm}
             onCancel={hideTimePicker}
-            minuteInterval={60}
+            minuteInterval={30}
           />
           <View style={styles.modalButtons}>
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
