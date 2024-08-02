@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken"
 
 const SUPER_SECRET_KEY: string = "yolo"
-const blockedList: Set<string>= new Set(); // Set has good performance on lookups
-
+const blockedList: Set<string>= new Set(); 
 interface Session {
     expiresAt: number,
     userId: string,
@@ -12,7 +11,7 @@ export const createSession = (username: string): string => {
     const expiry: Date = new Date();
     expiry.setMonth(expiry.getMonth() + 1)
 
-    const newSession : Session = { // no sessionID needed because session data is stored in token 
+    const newSession : Session = { 
         expiresAt: expiry.valueOf(),
         userId: username,
     }
