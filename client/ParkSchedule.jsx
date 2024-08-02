@@ -1,10 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react-native/no-unused-styles */
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable prettier/prettier */
-/* eslint-disable camelcase */
 import { useState, useEffect } from 'react';
 import {
   View,
