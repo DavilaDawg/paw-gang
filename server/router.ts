@@ -1,14 +1,7 @@
 import express from 'express';
 
 const router = express.Router();
-const {
-  getEventsbyPark,
-  getEventsbyUser,
-  getEvents,
-  postEvents,
-  deleteEvent,
-  editEvent
-} = require('./controllers/controllers.ts');
+import { getEventsbyPark, getEventsbyUser, getEvents, postEvents, deleteEvent, editEvent } from './controllers/eventController';
 
 router.get('/events/', getEvents);
 router.get('/events/park/:place_id', getEventsbyPark);
