@@ -13,18 +13,17 @@ import {
 import moment from 'moment-timezone';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import axios from 'axios';
+import { ParamListBase } from '@react-navigation/native';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 
 const SERVER_URL = 'http://192.168.1.103:3000';
 
-type ParkScheduleProps = {
-  route: {
-    params: {
-      place_id: string;
-      name: string;
-      vicinity: string;
-    };
-  };
+type ParkScheduleParams = {
+  place_id: string;
+  name: string;
+  vicinity: string;
 };
+type ParkScheduleProps = NativeStackScreenProps<ParamListBase, 'ParkSchedule'>;
 
 type Event = {
   _id: string;
@@ -37,7 +36,7 @@ type Event = {
 };
 
 function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
-  const { place_id, name, vicinity } = route.params;
+  const { place_id, name, vicinity } = route.params as ParkScheduleParams;
   const [selectedDate, setSelectedDate] = useState(
     moment().tz('Europe/Madrid')
   );
@@ -46,7 +45,6 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
   const [newEventDate, setNewEventDate] = useState('');
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [isPrevDayDisabled, setIsPrevDayDisabled] = useState(true);
-
   useEffect(() => {
     const fetchEvents = async () => {
       try {
