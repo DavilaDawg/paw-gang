@@ -1,8 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import router from './router'; 
-import connectToDatabase from './models/index';
+import {router} from "./router"; 
+import {connectToDatabase} from './models/index';
 
 
 const app = express();
