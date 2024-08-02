@@ -1,11 +1,4 @@
-/* eslint-disable global-require */
-/* eslint-disable react-native/sort-styles */
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable react/jsx-boolean-value */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable import/no-extraneous-dependencies */
+
 import React, { useState } from 'react';
 import {
   StyleSheet,
