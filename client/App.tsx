@@ -1,4 +1,4 @@
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -7,13 +7,14 @@ import Constants from 'expo-constants';
 import SearchScreen from './SearchScreen';
 import PlanScreen from './PlanScreen';
 import ParkSchedule from './ParkSchedule';
-import Login from './Login.jsx';
+import Login from './Login';
 import ProfileScreen from './ProfileScreen';
+import React from 'react';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function LogoHeader() {
+const LogoHeader: React.FC = () => {
   return (
     <View style={styles.logoDiv}>
       <Image source={require('./assets/logo.jpg')} style={styles.logo} />
@@ -21,7 +22,7 @@ function LogoHeader() {
   );
 }
 
-function SearchStack() {
+const SearchStack: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -38,14 +39,15 @@ function SearchStack() {
   );
 }
 
-function MainTabs() {
+const MainTabs: React.FC = () => {
+  let iconName: string;
+
   return (
     <>
-      <LogoHeader />
+      <LogoHeader/>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
 
             if (route.name === 'SearchTab') {
               iconName = focused ? 'search' : 'search-outline';
@@ -88,7 +90,7 @@ function MainTabs() {
   );
 }
 
-export default function App() {
+const App: React.FC = () =>{
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -114,6 +116,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#cfcec9',
     padding: 10,
     paddingTop: Constants.statusBarHeight,
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
+
+export default App

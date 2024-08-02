@@ -8,9 +8,26 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-export default function Login({ navigation }) {
-  const [form, setForm] = useState({
+type RootStackParams = {
+  Login: undefined;
+  Main: undefined;
+};
+
+type LoginNavProp = StackNavigationProp<RootStackParams, 'Login'>;
+
+interface LoginProps {
+  navigation: LoginNavProp;
+}
+
+interface FormState {
+  email: string;
+  password: string;
+}
+
+const Login: React.FC<LoginProps> = ({ navigation }) => {
+  const [form, setForm] = useState<FormState>({
     email: '',
     password: ''
   });
@@ -185,6 +202,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 26,
     fontWeight: '600',
-    color: '#fff'
-  }
+    color: '#fff',
+  },
 });
+
+export default Login;
