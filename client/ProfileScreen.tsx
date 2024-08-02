@@ -1,13 +1,17 @@
-/* eslint-disable react-native/sort-styles */
-/* eslint-disable global-require */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-color-literals */
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-function ProfileScreen() {
-  const navigation = useNavigation();
+type RootStackParamList = { // Profile and login don't have params but makes navigation scalable and ready for future changes
+  Profile: undefined;
+  Login: undefined;
+};
+
+type ProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Profile'>;
+
+const ProfileScreen: React.FC = () => {
+  const navigation = useNavigation<ProfileNavigationProp>();
 
   const handleLogout = () => {
     navigation.replace('Login');
