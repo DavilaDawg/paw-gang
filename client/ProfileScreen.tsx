@@ -1,9 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-function ProfileScreen() {
-  const navigation = useNavigation();
+type RootStackParams = { // Profile and login don't have params but makes navigation scalable and ready for future changes
+  Profile: undefined;
+  Login: undefined;
+};
+
+type ProfileNavigationProp = StackNavigationProp<RootStackParams, 'Profile'>;
+
+const ProfileScreen: React.FC = () => {
+  const navigation = useNavigation<ProfileNavigationProp>();
 
   const handleLogout = () => {
     navigation.replace('Login');
