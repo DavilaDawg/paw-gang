@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -15,17 +15,30 @@ import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomButton from './customButton';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+type RootStackParamList = {
+  ParkSchedule: { place_id: string; name: string; vicinity: string };
+};
+export type DogPark = {
+  place_id: string;
+  name: string;
+  vicinity: string;
+  rating: number;
+  photos?: Array<{ photo_reference: string }>;
+};
 
 function SearchScreen() {
   const [locationInput, setLocationInput] = useState('');
-  const [dogParks, setDogParks] = useState([]);
+  const [dogParks, setDogParks] = useState<DogPark[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
-  const navigation = useNavigation();
-  const apiKey = Constants.expoConfig.extra.googleMapsApiKey;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey as string;
 
-  const fetchDogParks = async location => {
+  const fetchDogParks = async (location: string) => {
     if (location.trim() === '') {
       setDogParks([]);
       return;
@@ -52,13 +65,13 @@ function SearchScreen() {
         setError('Location not found.');
       }
     } catch (err) {
-      setError(err.message || 'An error occurred.');
+      setError((err as Error).message || 'An error occurred.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getPhotoUrl = photoReference => {
+  const getPhotoUrl = (photoReference: string) => {
     return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
   };
 
@@ -87,13 +100,17 @@ function SearchScreen() {
 
       setDogParks(placesResponse.data.results || []);
     } catch (err) {
-      setError(err.message || 'An error occurred.');
+      setError((err as Error).message || 'An error occurred.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handlePlanVisit = (place_id, name, vicinity) => {
+  const handlePlanVisit = (
+    place_id: string,
+    name: string,
+    vicinity: string
+  ) => {
     navigation.navigate('ParkSchedule', { place_id, name, vicinity });
   };
 

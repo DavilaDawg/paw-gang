@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import SearchScreen from './SearchScreen.txs';
+import SearchScreen from './SearchScreen.tsx';
 import PlanScreen from './PlanScreen';
 import ParkSchedule from './ParkSchedule';
 import Login from './Login';
