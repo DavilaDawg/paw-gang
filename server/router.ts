@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 
 const router = express.Router();
 const {
@@ -17,4 +17,4 @@ router.post('/events', postEvents);
 router.delete('/events/:_id', deleteEvent);
 router.put('/events/:_id', editEvent);
 
-module.exports = router;
+export default router;
