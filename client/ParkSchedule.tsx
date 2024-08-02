@@ -1,10 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react-native/no-unused-styles */
-/* eslint-disable react-native/no-color-literals */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable prefer-destructuring */
-/* eslint-disable prettier/prettier */
-/* eslint-disable camelcase */
 import { useState, useEffect } from 'react';
 import {
   View,
@@ -15,7 +8,7 @@ import {
   Modal,
   TouchableOpacity,
   Alert,
-  Image,
+  Image
 } from 'react-native';
 import moment from 'moment-timezone';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -26,7 +19,7 @@ const SERVER_URL = 'http://192.168.1.103:3000';
 function ParkSchedule({ route }) {
   const { place_id, name, vicinity } = route.params;
   const [selectedDate, setSelectedDate] = useState(
-    moment().tz('Europe/Madrid'),
+    moment().tz('Europe/Madrid')
   );
   const [events, setEvents] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,10 +30,14 @@ function ParkSchedule({ route }) {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get(`${SERVER_URL}/events/park/${place_id}`);
+        const response = await axios.get(
+          `${SERVER_URL}/events/park/${place_id}`
+        );
         const data = response.data;
         const formattedEvents = data.reduce((acc, event) => {
-          const dateKey = moment(event.date).tz('Europe/Madrid').format('YYYY-MM-DD');
+          const dateKey = moment(event.date)
+            .tz('Europe/Madrid')
+            .format('YYYY-MM-DD');
           if (!acc[dateKey]) {
             acc[dateKey] = [];
           }
@@ -72,11 +69,13 @@ function ParkSchedule({ route }) {
   };
 
   const handleSaveEvent = async () => {
-    const eventDate = moment.tz(
-      `${selectedDate.format('YYYY-MM-DD')} ${newEventDate}`,
-      'YYYY-MM-DD HH:mm',
-      'Europe/Madrid'
-    ).toISOString();
+    const eventDate = moment
+      .tz(
+        `${selectedDate.format('YYYY-MM-DD')} ${newEventDate}`,
+        'YYYY-MM-DD HH:mm',
+        'Europe/Madrid'
+      )
+      .toISOString();
 
     const eventToAdd = {
       place_id,
@@ -85,16 +84,16 @@ function ParkSchedule({ route }) {
       date: eventDate,
       user: 'eugenio',
       dog_avatar:
-        'https://i.ibb.co/86gL7yK/Whats-App-Image-2024-07-25-at-15-20-30-modified.png',
+        'https://i.ibb.co/86gL7yK/Whats-App-Image-2024-07-25-at-15-20-30-modified.png'
     };
 
     try {
       await axios.post(`${SERVER_URL}/events`, eventToAdd);
 
       const dateKey = selectedDate.format('YYYY-MM-DD');
-      setEvents((prevEvents) => ({
+      setEvents(prevEvents => ({
         ...prevEvents,
-        [dateKey]: [...(prevEvents[dateKey] || []), eventToAdd],
+        [dateKey]: [...(prevEvents[dateKey] || []), eventToAdd]
       }));
 
       setModalVisible(false);
@@ -113,11 +112,10 @@ function ParkSchedule({ route }) {
 
   const renderItem = ({ item }) => {
     const dayEvents = events[selectedDate.format('YYYY-MM-DD')] || [];
-    const slotEvents = dayEvents.filter((event) =>
-      moment(event.date).tz('Europe/Madrid').isSame(
-        selectedDate.clone().hour(moment(item, 'HH:mm').hour()),
-        'hour',
-      ),
+    const slotEvents = dayEvents.filter(event =>
+      moment(event.date)
+        .tz('Europe/Madrid')
+        .isSame(selectedDate.clone().hour(moment(item, 'HH:mm').hour()), 'hour')
     );
 
     return (
@@ -130,7 +128,7 @@ function ParkSchedule({ route }) {
             horizontal
             data={slotEvents}
             renderItem={renderEvent}
-            keyExtractor={(event) => `${event._id}-${event.date}-${event.user}`}
+            keyExtractor={event => `${event._id}-${event.date}-${event.user}`}
             style={styles.eventList}
           />
         )}
@@ -139,7 +137,7 @@ function ParkSchedule({ route }) {
   };
 
   const hours = Array.from({ length: 24 }, (_, i) =>
-    moment({ hour: i }).tz('Europe/Madrid').format('HH:00'),
+    moment({ hour: i }).tz('Europe/Madrid').format('HH:00')
   );
 
   const showTimePicker = () => {
@@ -150,7 +148,7 @@ function ParkSchedule({ route }) {
     setTimePickerVisibility(false);
   };
 
-  const handleConfirm = (time) => {
+  const handleConfirm = time => {
     const formattedTime = moment(time)
       .tz('Europe/Madrid')
       .minute(0)
@@ -162,14 +160,18 @@ function ParkSchedule({ route }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Button title="Prev Day" onPress={handlePrevDay} disabled={isPrevDayDisabled} />
+        <Button
+          title="Prev Day"
+          onPress={handlePrevDay}
+          disabled={isPrevDayDisabled}
+        />
         <Text style={styles.date}>{selectedDate.format('dddd, D MMM')}</Text>
         <Button title="Next Day" onPress={handleNextDay} />
       </View>
       <FlatList
         data={hours}
         renderItem={renderItem}
-        keyExtractor={(item) => item}
+        keyExtractor={item => item}
       />
       <TouchableOpacity
         style={styles.addButton}
@@ -213,34 +215,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#008CBA',
     justifyContent: 'center',
-    padding: 15,
+    padding: 15
   },
   addButtonText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 18
   },
   container: {
     backgroundColor: '#f5f5f5',
-    flex: 1,
+    flex: 1
   },
   date: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   dogAvatar: {
     borderRadius: 40,
     height: 90,
-    width: 90,
+    width: 90
   },
   event: {
     backgroundColor: '#f5f5f5',
     borderRadius: 5,
     marginHorizontal: 0,
-    padding: 10,
+    padding: 10
   },
   eventList: {
     flex: 1,
-    paddingLeft: 0,
+    paddingLeft: 0
   },
   header: {
     alignItems: 'center',
@@ -249,7 +251,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 10
   },
   input: {
     borderColor: '#ccc',
@@ -257,34 +259,34 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   inputText: {
     color: '#000',
-    fontSize: 16,
+    fontSize: 16
   },
   modalButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   modalContent: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    padding: 20
   },
   modalTitle: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 20
   },
   placeId: {
     backgroundColor: '#ddd',
     fontSize: 16,
     padding: 10,
-    textAlign: 'center',
+    textAlign: 'center'
   },
   placeholderText: {
     color: '#ccc',
-    fontSize: 16,
+    fontSize: 16
   },
   slot: {
     alignItems: 'center',
@@ -292,16 +294,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     flexDirection: 'row',
     paddingHorizontal: 20,
-    paddingVertical: 35,
+    paddingVertical: 35
   },
   slotWithEvent: {
-    paddingVertical: 0,
+    paddingVertical: 0
   },
   time: {
     fontSize: 16,
     fontWeight: 'bold',
-    width: 60,
-  },
+    width: 60
+  }
 });
 
 export default ParkSchedule;
