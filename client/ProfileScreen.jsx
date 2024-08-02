@@ -1,7 +1,3 @@
-/* eslint-disable react-native/sort-styles */
-/* eslint-disable global-require */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react-native/no-color-literals */
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -39,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     flex: 1,
     justifyContent: 'center',
-    paddingTop: 0,
+    paddingTop: 0
   },
   image: {
     borderColor: 'white',
@@ -47,25 +43,25 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: 200,
     width: 200,
-    marginBottom: 20,
+    marginBottom: 20
   },
   text: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 20,
-    marginBottom: 10,
+    marginBottom: 10
   },
   button: {
     backgroundColor: '#008CBA',
     borderRadius: 5,
     marginVertical: 10,
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   logoutButton: {
     backgroundColor: 'red',
@@ -74,13 +70,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     width: 125,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   logoutButtonText: {
     color: 'white',
     fontSize: 16,
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
 
 export default ProfileScreen;
