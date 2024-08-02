@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,7 +8,6 @@ import {
   Alert,
   ImageBackground
 } from 'react-native';
-import React, { useState } from 'react';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,16 +16,25 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const SERVER_URL = 'http://192.168.1.103:3000';
 
-function PlanScreen() {
-  const [events, setEvents] = useState([]);
+interface Event {
+  _id: string;
+  park_name: string;
+  address: string;
+  date: string;
+}
+
+function PlanScreen(): JSX.Element {
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [newEventTime, setNewEventTime] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [newEventTime, setNewEventTime] = useState<string | null>(null);
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`${SERVER_URL}/events/user/eugenio`);
+      const response = await axios.get<Event[]>(
+        `${SERVER_URL}/events/user/eugenio`
+      );
       const currentTime = moment().tz('Europe/Madrid');
       const upcomingEvents = response.data.filter(event =>
         moment(event.date)
@@ -35,8 +44,8 @@ function PlanScreen() {
 
       upcomingEvents.sort(
         (a, b) =>
-          moment(a.date).tz('Europe/Madrid') -
-          moment(b.date).tz('Europe/Madrid')
+          moment(a.date).tz('Europe/Madrid').valueOf() -
+          moment(b.date).tz('Europe/Madrid').valueOf()
       );
 
       setEvents(upcomingEvents);
@@ -53,7 +62,7 @@ function PlanScreen() {
     }, [])
   );
 
-  const handleDelete = async _id => {
+  const handleDelete = async (_id: string) => {
     try {
       await axios.delete(`${SERVER_URL}/events/${_id}`);
       setEvents(prevEvents => prevEvents.filter(item => item._id !== _id));
@@ -63,12 +72,14 @@ function PlanScreen() {
     }
   };
 
-  const handleEdit = event => {
+  const handleEdit = (event: Event) => {
     setSelectedEvent(event);
     setTimePickerVisibility(true);
   };
 
-  const handleConfirm = async time => {
+  const handleConfirm = async (time: Date) => {
+    if (!selectedEvent) return;
+
     const newTime = moment(time).tz('Europe/Madrid').format('HH:mm');
     setNewEventTime(newTime);
 
@@ -96,7 +107,7 @@ function PlanScreen() {
     }
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({ item }: { item: Event }) => (
     <View style={styles.eventItem}>
       <Text style={styles.eventText}>Park Name: {item.park_name}</Text>
       <Text style={styles.eventText}>Address: {item.address}</Text>
@@ -142,7 +153,7 @@ function PlanScreen() {
         mode="time"
         onConfirm={handleConfirm}
         onCancel={() => setTimePickerVisibility(false)}
-        minuteInterval={60}
+        minuteInterval={30}
       />
     </View>
   );
