@@ -1,10 +1,10 @@
-import { View, Image, StyleSheet} from 'react-native';
+import { View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Constants from 'expo-constants';
-import SearchScreen from './SearchScreen';
+import SearchScreen from './SearchScreen.txs';
 import PlanScreen from './PlanScreen';
 import ParkSchedule from './ParkSchedule';
 import Login from './Login';
@@ -20,7 +20,7 @@ const LogoHeader: React.FC = () => {
       <Image source={require('./assets/logo.jpg')} style={styles.logo} />
     </View>
   );
-}
+};
 
 const SearchStack: React.FC = () => {
   return (
@@ -37,18 +37,17 @@ const SearchStack: React.FC = () => {
       />
     </Stack.Navigator>
   );
-}
+};
 
 const MainTabs: React.FC = () => {
   let iconName: string;
 
   return (
     <>
-      <LogoHeader/>
+      <LogoHeader />
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
-
             if (route.name === 'SearchTab') {
               iconName = focused ? 'search' : 'search-outline';
             } else if (route.name === 'MyPlansTab') {
@@ -88,9 +87,9 @@ const MainTabs: React.FC = () => {
       </Tab.Navigator>
     </>
   );
-}
+};
 
-const App: React.FC = () =>{
+const App: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -99,7 +98,7 @@ const App: React.FC = () =>{
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -116,8 +115,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#cfcec9',
     padding: 10,
     paddingTop: Constants.statusBarHeight,
-    width: '100%',
-  },
+    width: '100%'
+  }
 });
 
-export default App
+export default App;
