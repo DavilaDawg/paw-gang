@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "server",
+			"path": "."
+		},
+		{
+			"name": "client",
+			"path": "../client"
+		}
+	],
+	"settings": {
+		"jest.disabledWorkspaceFolders": [
+			"legacy"
+		]
+	}
+}
