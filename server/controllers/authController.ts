@@ -1,42 +1,47 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { User } from "../models/users";
+import { BlockedUser } from "../models/blockedUsers";
 
-const SUPER_SECRET_KEY: string = "yolo"
-const blockedList: Set<string>= new Set(); 
-interface Session {
-    expiresAt: number,
-    userId: string,
+dotenv.config();
+
+const SUPER_SECRET_KEY: string = process.env.JWT_SECRET;
+interface JWTPayload {
+  userId: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const createSession = (username: string): string => {
-    const expiry: Date = new Date();
-    expiry.setMonth(expiry.getMonth() + 1)
+export const createSession = async (userId: string): Promise<string> => {
+  const user = await User.findById(userId);
 
-    const newSession : Session = { 
-        expiresAt: expiry.valueOf(),
-        userId: username,
+  if (!user) {
+    console.error("User not found");
+    return null;
+  }
+
+  const payload: JWTPayload = { userId };
+  return jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
+};
+
+export const getSession = async (token: string): Promise<JWTPayload | null> => {
+  try {
+    const blockedToken = await BlockedUser.findOne({ token });
+    if (blockedToken) return null;
+
+    const decoded = jwt.verify(token, SUPER_SECRET_KEY) as JWTPayload;
+    return decoded;
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log("Token has expired.");
+    } else {
+      console.error("Invalid token:", error);
     }
+    return null;
+  }
+};
 
-    return jwt.sign(newSession, SUPER_SECRET_KEY)
-}
-
-export const getSession = (token: string): Session | undefined => {
-    if (blockedList.has(token)) return undefined
-
-    try {
-        const decoded = jwt.verify(token, SUPER_SECRET_KEY) as Session
-
-        if (decoded.expiresAt < Date.now()) {
-            console.log("Token has expired.")
-            return undefined
-        }
-
-        return decoded
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return undefined;
-    }
-}
-
-export const destroySession = (token: string): void => {
-    blockedList.add(token)
-}
+export const destroySession = async (token: string): Promise<void> => {
+  const blockedUser = new BlockedUser({ token });
+  await blockedUser.save();
+};

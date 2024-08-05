@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "@types/jest": "^29.5.12"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
