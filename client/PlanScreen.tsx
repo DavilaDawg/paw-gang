@@ -14,8 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const SERVER_URL = 'http://192.168.1.103:3000';
-
+const SERVER_URL = 'http://localhost:3000'
 interface Event {
   _id: string;
   park_name: string;

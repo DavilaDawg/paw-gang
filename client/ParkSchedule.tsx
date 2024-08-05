@@ -16,7 +16,7 @@ import axios from 'axios';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 
-const SERVER_URL = 'http://192.168.1.103:3000';
+const SERVER_URL = 'http://localhost:3000';
 
 type ParkScheduleParams = {
   place_id: string;
