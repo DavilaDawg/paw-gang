@@ -11,10 +11,9 @@ app.use(bodyParser.json());
 app.use(router);
 
 const PORT = 3000;
-const LOCAL_IP_ADRESS = 'localhost';
 
 connectToDatabase().then(() => {
-  app.listen(PORT, LOCAL_IP_ADRESS, () => {
-    console.log(`Server is running on http://${LOCAL_IP_ADRESS}:${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
   });
 });

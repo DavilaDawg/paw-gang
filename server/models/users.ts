@@ -2,13 +2,11 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const user = new Schema({
+const userSchema = new Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
 });
-  
-user.set('toJSON', { getters: true });
 
-const Users = mongoose.model('Users', user);
+userSchema.set('toJSON', { getters: true });
 
-export default Users;
+export const User = mongoose.model('User', userSchema);

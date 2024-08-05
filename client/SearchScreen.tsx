@@ -10,12 +10,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 import axios from 'axios';
-import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomButton from './customButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Constants from 'expo-constants';
+
 
 type RootStackParamList = {
   ParkSchedule: { place_id: string; name: string; vicinity: string };
@@ -36,7 +37,8 @@ function SearchScreen() {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey as string;
+
+  const apiKey = Constants.expoConfig?.extra?.googleMapsApiKey ?? '';
 
   const fetchDogParks = async (location: string) => {
     if (location.trim() === '') {
