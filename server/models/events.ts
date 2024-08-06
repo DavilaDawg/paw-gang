@@ -3,8 +3,6 @@ import moment from 'moment-timezone';
 
 const { Schema } = mongoose;
 
-// defining the Schema for the Events
-
 const events = new Schema({
   place_id: { type: String, required: true },
   park_name: { type: String, required: true },
