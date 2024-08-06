@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-  ImageBackground
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native';
 import axios from 'axios';
 import moment from 'moment-timezone';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-// isa's:
-const SERVER_URL = 'http://10.10.22.20:3000';
+const isaIP = '10.10.22.20';
+const SERVER_URL = `http://${isaIP}:3000`;
 interface Event {
   _id: string;
   park_name: string;
