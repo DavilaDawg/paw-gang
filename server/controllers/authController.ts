@@ -1,43 +1,63 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { Request, Response } from "express"; 
+import { User } from "../models/users";
+import { BlockedUser } from "../models/blockedUsers";
 
-const SUPER_SECRET_KEY: string = "yolo"
-const blockedList: Set<string>= new Set(); // Set has good performance on lookups
+dotenv.config();
 
-interface Session {
-    expiresAt: number,
-    userId: string,
+const SUPER_SECRET_KEY: string = process.env.JWT_SECRET;
+interface JWTPayload {
+  userId: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const createSession = (username: string): string => {
-    const expiry: Date = new Date();
-    expiry.setMonth(expiry.getMonth() + 1)
-
-    const newSession : Session = { // no sessionID needed because session data is stored in token 
-        expiresAt: expiry.valueOf(),
-        userId: username,
+export const createSession = async (req: Request, res: Response): Promise<void> => {
+    const userId = req.body.userId;
+  
+    if (!userId) {
+      res.status(400).json({ error: "User ID is required" });
+      return;
     }
-
-    return jwt.sign(newSession, SUPER_SECRET_KEY)
-}
-
-export const getSession = (token: string): Session | undefined => {
-    if (blockedList.has(token)) return undefined
-
+  
     try {
-        const decoded = jwt.verify(token, SUPER_SECRET_KEY) as Session
-
-        if (decoded.expiresAt < Date.now()) {
-            console.log("Token has expired.")
-            return undefined
-        }
-
-        return decoded
+      const user = await User.findById(userId);
+  
+      if (!user) {
+        console.error("User not found");
+        res.status(404).json({ error: "User not found" });
+        return;
+      }
+  
+      const payload: JWTPayload = { userId };
+      const token = jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
+  
+      res.status(201).json({ token });
     } catch (error) {
-        console.error("Invalid token:", error);
-        return undefined;
+      console.error("Error creating session:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-}
+  };
 
-export const destroySession = (token: string): void => {
-    blockedList.add(token)
-}
+export const getSession = async (token: string): Promise<JWTPayload | null> => {
+  try {
+    const blockedToken = await BlockedUser.findOne({ token });
+    if (blockedToken) return null;
+
+    const decoded = jwt.verify(token, SUPER_SECRET_KEY) as JWTPayload;
+    return decoded;
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log("Token has expired.");
+    } else {
+      console.error("Invalid token:", error);
+    }
+    return null;
+  }
+};
+
+export const destroySession = async (token: string): Promise<void> => {
+  const blockedUser = new BlockedUser({ token });
+  await blockedUser.save();
+};
