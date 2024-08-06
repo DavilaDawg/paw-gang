@@ -34,8 +34,6 @@ export const createSession = async (
     }
 
     const payload: JWTPayload = { userId };
-    console.log("Payload:", payload); // Add this line for debugging
-    console.log("Secret Key:", SUPER_SECRET_KEY); // Add this line for debugging
     const token = jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
     res.status(201).json({ token });
   } catch (error) {

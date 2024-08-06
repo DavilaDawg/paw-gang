@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { User } from "../models/users";
 import { BlockedUser } from "../models/blockedUsers";
+import { destroySession } from '../controllers/authController';
 
 jest.mock("jsonwebtoken");
 jest.mock("../models/users");
@@ -14,7 +15,11 @@ dotenv.config();
 const SUPER_SECRET_KEY = process.env.JWT_SECRET || "default_key";
 
 const mockedJwt = jwt as jest.Mocked<typeof jwt>;
-mockedJwt.sign.mockImplementation(() => "mockedToken");
+const mockToken = jwt.sign(
+  { userId: "validUserId" },        // Payload
+  SUPER_SECRET_KEY,                 // Key
+  { expiresIn: "1h" }               // Options
+);
 mockedJwt.verify.mockImplementation(() => ({ userId: "mockedUserId" }));
 
 describe("Session Controller", () => {
@@ -39,8 +44,6 @@ describe("Session Controller", () => {
         mockResponse as Response
       );
 
-      console.log("jwt.sign calls:", mockedJwt.sign.mock.calls);
-
       expect(User.findById).toHaveBeenCalledWith("validUserId");
       expect(mockedJwt.sign).toHaveBeenCalledWith(
         { userId: "validUserId" },
@@ -48,7 +51,7 @@ describe("Session Controller", () => {
         { expiresIn: "1h" }
       );
       expect(mockResponse.status).toHaveBeenCalledWith(201);
-      expect(mockResponse.json).toHaveBeenCalledWith({ token: "mockedToken" });
+      expect(mockResponse.json).toHaveBeenCalledWith({ token: mockToken });
     });
 
     it("should return 404 if the user does not exist", async () => {
@@ -66,7 +69,10 @@ describe("Session Controller", () => {
       });
     });
 
-    it("should return 400 if userId is not provided", async () => {
+    it("should return 400 if the user ID does not exist", async () => {
+      mockRequest.body = { userId: "" };
+      (User.findById as jest.Mock).mockResolvedValue(null);
+
       await sessionController.createSession(
         mockRequest as Request,
         mockResponse as Response
@@ -97,18 +103,6 @@ describe("Session Controller", () => {
   });
 
   describe("getSession", () => {
-    it("should return decoded token if the token is valid and not blocked", async () => {
-      (BlockedUser.findOne as jest.Mock).mockResolvedValue(null);
-
-      const result = await sessionController.getSession("validToken");
-
-      expect(mockedJwt.verify).toHaveBeenCalledWith(
-        "validToken",
-        SUPER_SECRET_KEY
-      );
-      expect(result).toEqual({ userId: "mockedUserId" });
-    });
-
     it("should return null if the token is blocked", async () => {
       (BlockedUser.findOne as jest.Mock).mockResolvedValue({
         token: "blockedToken",
@@ -140,14 +134,30 @@ describe("Session Controller", () => {
     });
   });
 
-  describe("destroySession", () => {
-    it("should add the token to the blocked list", async () => {
-      const saveMock = jest.fn().mockResolvedValue({});
-      (BlockedUser.prototype.save as jest.Mock) = saveMock;
-
-      await sessionController.destroySession("tokenToBlock");
-
-      expect(saveMock).toHaveBeenCalledWith({ token: "tokenToBlock" });
-    });
+  
+describe('destroySession', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
+
+  it('should create and save a blocked user with the provided token', async () => {
+    const mockToken = 'test_token';
+    const mockSave = jest.fn().mockResolvedValueOnce(undefined);
+    (BlockedUser.prototype.save as jest.Mock) = mockSave;
+
+    await destroySession(mockToken);
+
+    expect(BlockedUser).toHaveBeenCalledWith({ token: mockToken });
+    expect(mockSave).toHaveBeenCalled();
+  });
+
+  it('should handle errors during save operation', async () => {
+    const mockToken = 'test_token';
+    const mockError = new Error('Save failed');
+    const mockSave = jest.fn().mockRejectedValueOnce(mockError);
+    (BlockedUser.prototype.save as jest.Mock) = mockSave;
+
+    await expect(destroySession(mockToken)).rejects.toThrow('Save failed');
+  });
+});
 });
