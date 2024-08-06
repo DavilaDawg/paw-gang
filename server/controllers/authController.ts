@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import { Request, Response } from "express"; 
+import { Request, Response } from "express";
 import { User } from "../models/users";
 import { BlockedUser } from "../models/blockedUsers";
 
@@ -13,32 +13,36 @@ interface JWTPayload {
   exp?: number;
 }
 
-export const createSession = async (req: Request, res: Response): Promise<void> => {
-    const userId = req.body.userId;
-  
-    if (!userId) {
-      res.status(400).json({ error: "User ID is required" });
+export const createSession = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const userId = req.body.userId;
+
+  if (!userId) {
+    res.status(400).json({ error: "User ID is required" });
+    return;
+  }
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      console.error("User not found");
+      res.status(404).json({ error: "User not found" });
       return;
     }
-  
-    try {
-      const user = await User.findById(userId);
-  
-      if (!user) {
-        console.error("User not found");
-        res.status(404).json({ error: "User not found" });
-        return;
-      }
-  
-      const payload: JWTPayload = { userId };
-      const token = jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
-  
-      res.status(201).json({ token });
-    } catch (error) {
-      console.error("Error creating session:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
+
+    const payload: JWTPayload = { userId };
+    console.log("Payload:", payload); // Add this line for debugging
+    console.log("Secret Key:", SUPER_SECRET_KEY); // Add this line for debugging
+    const token = jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.error("Error creating session:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 export const getSession = async (token: string): Promise<JWTPayload | null> => {
   try {
