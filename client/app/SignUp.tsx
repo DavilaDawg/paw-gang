@@ -8,7 +8,6 @@ import {
   TextInput
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import SignUp from './SignUp';
 
 type RootStackParams = {
   Login: undefined;
@@ -16,28 +15,29 @@ type RootStackParams = {
   Main: undefined;
 };
 
-type LoginNavProp = StackNavigationProp<RootStackParams, 'Login'>;
+type SignUpNavProp = StackNavigationProp<RootStackParams, 'SignUp'>;
 
-interface LoginProps {
-  navigation: LoginNavProp;
+interface SignUpProps {
+  navigation: SignUpNavProp;
 }
 
 interface FormState {
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
-const Login: React.FC<LoginProps> = ({ navigation }) => {
+const SignUp: React.FC<SignUpProps> = ({ navigation }) => {
   const [form, setForm] = useState<FormState>({
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
-
-  const handleSignIn = () => {
+  const handleSignUp = () => {
     navigation.replace('Main');
   };
-  const handleSignUp = () => {
-    navigation.navigate('SignUp');
+  const handleLogin = () => {
+    navigation.navigate('Login');
   };
 
   return (
@@ -47,16 +47,16 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
           <Image
             alt="App Logo"
             resizeMode="contain"
-            className="bg-[#cfcec9] w-[300px] h-[150px] self-center mb-9"
+            className="bg-[#cfcec9] w-[250px] h-[125px] self-center mb-9"
             source={require('../assets/logo.jpg')}
           />
 
           <Text className="text-3xl font-bold text-black mb-1.5">
-            Sign in to <Text className="text-[#008CBA]">Paw Gang</Text>
+            Sign up for <Text className="text-[#008CBA]">Paw Gang</Text>
           </Text>
 
           <Text className="text-base font-medium text-black">
-            Get your dog's tail wagging with a playdate!
+            Join the pack and start planning playdates!
           </Text>
         </View>
 
@@ -96,24 +96,39 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
             />
           </View>
 
+          <View className="mb-4">
+            <Text className="text-lg font-semibold text-black mb-2">
+              Confirm Password
+            </Text>
+
+            <TextInput
+              autoCorrect={false}
+              clearButtonMode="while-editing"
+              onChangeText={confirmPassword =>
+                setForm({ ...form, confirmPassword })
+              }
+              placeholder="********"
+              placeholderTextColor="grey"
+              className="h-[50px] bg-[#cfcec9] px-4 rounded-xl text-base font-medium text-black border border-black"
+              secureTextEntry={true}
+              value={form.confirmPassword}
+            />
+          </View>
+
           <View className="mt-1 mb-4">
-            <TouchableOpacity onPress={handleSignIn}>
+            <TouchableOpacity onPress={handleSignUp}>
               <View className="flex-row items-center justify-center rounded-3xl py-2.5 px-5 border border-[#008CBA] bg-[#008CBA]">
                 <Text className="text-lg leading-7 font-semibold text-white">
-                  Sign in
+                  Sign up
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
-
-          <Text className="text-base font-semibold text-black text-center">
-            Forgot password?
-          </Text>
         </View>
 
-        <TouchableOpacity className="mt-auto" onPress={handleSignUp}>
+        <TouchableOpacity className="mt-auto" onPress={handleLogin}>
           <Text className="text-base font-semibold text-black text-center tracking-wide">
-            Don't have an account? <Text className="underline">Sign up</Text>
+            Already have an account? <Text className="underline">Log in</Text>
           </Text>
         </TouchableOpacity>
       </View>
@@ -121,4 +136,4 @@ const Login: React.FC<LoginProps> = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default SignUp;
