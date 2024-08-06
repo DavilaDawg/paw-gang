@@ -16,7 +16,7 @@ const ProfileScreen: React.FC = () => {
   const handleLogout = () => {
     navigation.replace('Login');
   };
-
+// FIX HARDCODE
   return (
     <View className="flex-1 justify-center items-center bg-gray-800 pt-0">
       <Image
@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
         className="w-52 h-52 rounded-full border-2 border-white mb-5"
       />
       <Text className="text-white font-bold text-xl mb-2">User: testuser</Text>
-      <Text className="text-white font-bold text-xl mb-2">Name: Eugenio</Text>
+      <Text className="text-white font-bold text-xl mb-2">Name: Eugenio</Text>  
       <Text className="text-white font-bold text-xl mb-2">Dog Name: Luffy</Text>
       <Text className="text-white font-bold text-xl mb-2">
         Email: test@test.com

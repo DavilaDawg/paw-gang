@@ -14,12 +14,14 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const SERVER_URL = 'http://localhost:3000';
+// isa's: 
+const SERVER_URL = 'http://10.10.22.20:3000';
 interface Event {
   _id: string;
   park_name: string;
   address: string;
   date: string;
+  user: string; 
 }
 
 function PlanScreen(): JSX.Element {
@@ -32,7 +34,7 @@ function PlanScreen(): JSX.Element {
   const fetchEvents = async () => {
     try {
       const response = await axios.get<Event[]>(
-        `${SERVER_URL}/events/user/eugenio`
+        `${SERVER_URL}/events/user/isa`
       );
       const currentTime = moment().tz('Europe/Madrid');
       const upcomingEvents = response.data.filter(event =>
