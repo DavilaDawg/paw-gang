@@ -3,13 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SearchScreen from './SearchScreen';
-import PlanScreen from './PlanScreen';
-import ParkSchedule from './ParkSchedule';
-import Login from './Login';
-import ProfileScreen from './ProfileScreen';
+import SearchScreen from './Screens/SearchScreen';
+import PlanScreen from './Screens/PlanScreen';
+import ParkSchedule from './Screens/ParkScheduleScreen';
+import LoginScreen from './Screens/LoginScreen';
+import ProfileScreen from './Screens/ProfileScreen';
 import React from 'react';
-import SignUp from './SignUp';
+import SignUpScreen from './Screens/SignUpScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -92,8 +92,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Main" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>

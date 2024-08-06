@@ -6,7 +6,7 @@ export default {
     slug: 'paw-gang',
     version: '1.0.0',
     extra: {
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
     },
     orientation: 'portrait',
     icon: './assets/icon.png',
@@ -14,20 +14,21 @@ export default {
     splash: {
       image: './assets/logo.jpg',
       resizeMode: 'contain',
-      backgroundColor: '#cfcec9',
+      backgroundColor: '#cfcec9'
     },
     ios: {
       supportsTablet: true,
-      simulator: true,
+      simulator: true
     },
     android: {
+      package: 'com.anonymous.pawgang',
       adaptiveIcon: {
         foregroundImage: './assets/icon.png',
-        backgroundColor: '#ffffff',
-      },
+        backgroundColor: '#ffffff'
+      }
     },
     web: {
-      favicon: './assets/icon.png',
-    },
-  },
+      favicon: './assets/icon.png'
+    }
+  }
 };
