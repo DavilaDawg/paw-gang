@@ -124,10 +124,12 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
       Alert.alert('Error', 'An error occurred while saving the event.');
     }
   };
-
   const renderEvent = ({ item }: { item: Event }) => (
-    <View style={styles.event}>
-      <Image source={{ uri: item.dog_avatar }} style={styles.dogAvatar} />
+    <View className="bg-gray-100 rounded p-2.5">
+      <Image
+        source={{ uri: item.dog_avatar }}
+        className="w-[90px] h-[90px] rounded-full"
+      />
     </View>
   );
 
@@ -141,16 +143,16 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
 
     return (
       <View
-        style={[styles.slot, slotEvents.length > 0 && styles.slotWithEvent]}
+        className={`flex-row items-center border-b border-gray-200 px-5 ${slotEvents.length > 0 ? 'py-0' : 'py-8'}`}
       >
-        <Text style={styles.time}>{item}</Text>
+        <Text className="text-base font-bold w-[60px]">{item}</Text>
         {slotEvents.length > 0 && (
           <FlatList
             horizontal
             data={slotEvents}
             renderItem={renderEvent}
             keyExtractor={event => `${event._id}-${event.date}-${event.user}`}
-            style={styles.eventList}
+            className="flex-1 pl-0"
           />
         )}
       </View>
@@ -179,14 +181,16 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
+    <View className="flex-1 bg-gray-100">
+      <View className="flex-row justify-between items-center bg-gray-100 border-b border-gray-300 p-2.5">
         <Button
           title="Prev Day"
           onPress={handlePrevDay}
           disabled={isPrevDayDisabled}
         />
-        <Text style={styles.date}>{selectedDate.format('dddd, D MMM')}</Text>
+        <Text className="text-lg font-bold">
+          {selectedDate.format('dddd, D MMM')}
+        </Text>
         <Button title="Next Day" onPress={handleNextDay} />
       </View>
       <FlatList
@@ -195,21 +199,28 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
         keyExtractor={item => item}
       />
       <TouchableOpacity
-        style={styles.addButton}
+        className="items-center justify-center bg-[#008CBA] p-4"
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.addButtonText}>Add visit 🐕</Text>
+        <Text className="text-white text-lg">Add visit 🐕</Text>
       </TouchableOpacity>
       <Modal
         visible={modalVisible}
         animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Plan your visit 🐶</Text>
-          <TouchableOpacity onPress={showTimePicker} style={styles.input}>
+        <View className="flex-1 justify-center p-5">
+          <Text className="text-2xl mb-5">Plan your visit 🐶</Text>
+          <TouchableOpacity
+            onPress={showTimePicker}
+            className="h-10 justify-center border border-gray-300 mb-5 px-2.5"
+          >
             <Text
-              style={newEventDate ? styles.inputText : styles.placeholderText}
+              className={
+                newEventDate
+                  ? 'text-base text-black'
+                  : 'text-base text-gray-400'
+              }
             >
               {newEventDate || 'Start Time (HH:00)'}
             </Text>
@@ -221,7 +232,7 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
             onCancel={hideTimePicker}
             minuteInterval={30}
           />
-          <View style={styles.modalButtons}>
+          <View className="flex-row justify-between">
             <Button title="Cancel" onPress={() => setModalVisible(false)} />
             <Button title="Save" onPress={handleSaveEvent} />
           </View>
@@ -230,101 +241,5 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  addButton: {
-    alignItems: 'center',
-    backgroundColor: '#008CBA',
-    justifyContent: 'center',
-    padding: 15
-  },
-  addButtonText: {
-    color: 'white',
-    fontSize: 18
-  },
-  container: {
-    backgroundColor: '#f5f5f5',
-    flex: 1
-  },
-  date: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  },
-  dogAvatar: {
-    borderRadius: 40,
-    height: 90,
-    width: 90
-  },
-  event: {
-    backgroundColor: '#f5f5f5',
-    borderRadius: 5,
-    marginHorizontal: 0,
-    padding: 10
-  },
-  eventList: {
-    flex: 1,
-    paddingLeft: 0
-  },
-  header: {
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10
-  },
-  input: {
-    borderColor: '#ccc',
-    borderWidth: 1,
-    height: 40,
-    justifyContent: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 10
-  },
-  inputText: {
-    color: '#000',
-    fontSize: 16
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  modalContent: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20
-  },
-  modalTitle: {
-    fontSize: 24,
-    marginBottom: 20
-  },
-  placeId: {
-    backgroundColor: '#ddd',
-    fontSize: 16,
-    padding: 10,
-    textAlign: 'center'
-  },
-  placeholderText: {
-    color: '#ccc',
-    fontSize: 16
-  },
-  slot: {
-    alignItems: 'center',
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 35
-  },
-  slotWithEvent: {
-    paddingVertical: 0
-  },
-  time: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    width: 60
-  }
-});
 
 export default ParkSchedule;

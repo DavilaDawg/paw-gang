@@ -21,8 +21,8 @@ class ErrorBoundary extends Component<
   render() {
     if (this.state.hasError) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.errorText}>Something went wrong.</Text>
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-red-500 text-lg">Something went wrong.</Text>
         </View>
       );
     }
@@ -30,17 +30,5 @@ class ErrorBoundary extends Component<
     return this.props.children;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center'
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 18
-  }
-});
 
 export default ErrorBoundary;

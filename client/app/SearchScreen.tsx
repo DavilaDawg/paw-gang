@@ -17,7 +17,6 @@ import CustomButton from './customButton';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Constants from 'expo-constants';
 
-
 type RootStackParamList = {
   ParkSchedule: { place_id: string; name: string; vicinity: string };
 };
@@ -117,38 +116,46 @@ function SearchScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Search for a dog park near you:</Text>
-      <View style={styles.inputContainer}>
+    <View className="flex-1 bg-gray-800">
+      <Text className="text-lg font-bold text-gray-100 mx-5 my-5">
+        Search for a dog park near you:
+      </Text>
+      <View className="flex-row items-center mb-5 mx-5">
         <TextInput
-          style={styles.input}
+          className="flex-1 h-10 border border-gray-500 text-gray-100 px-2.5"
           placeholder="Enter location..."
           placeholderTextColor="#9DA2AB"
           value={locationInput}
           onChangeText={text => setLocationInput(text)}
         />
-        <TouchableOpacity style={styles.button} onPress={handleLocationSubmit}>
+        <TouchableOpacity
+          className="bg-[#008CBA] rounded items-center justify-center ml-2.5 p-2.5"
+          onPress={handleLocationSubmit}
+        >
           <Icon name="search" size={24} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLocateMe}>
+        <TouchableOpacity
+          className="bg-[#008CBA] rounded items-center justify-center ml-2.5 p-2.5"
+          onPress={handleLocateMe}
+        >
           <Icon name="locate" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
       {isLoading && (
-        <View style={styles.loaderContainer}>
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#ffffff" />
         </View>
       )}
-      {error && <Text style={styles.errorText}>Error: {error}</Text>}
+      {error && <Text className="text-red-500 mb-5 ml-5">Error: {error}</Text>}
       <FlatList
         data={dogParks}
         keyExtractor={item => item.place_id}
         renderItem={({ item }) => (
-          <View style={styles.parkItem}>
-            <Text style={styles.parkName}>{item.name}</Text>
+          <View className="bg-gray-100 rounded-md mb-5 mx-5 p-2.5">
+            <Text className="text-lg font-bold">{item.name}</Text>
             {item.photos && item.photos.length > 0 && (
               <Image
-                style={styles.parkImage}
+                className="w-full h-[200px] rounded-md mb-2.5 object-cover"
                 source={{ uri: getPhotoUrl(item.photos[0].photo_reference) }}
               />
             )}
@@ -168,67 +175,3 @@ function SearchScreen() {
 }
 
 export default SearchScreen;
-
-const styles = StyleSheet.create({
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#008CBA',
-    borderRadius: 5,
-    justifyContent: 'center',
-    marginLeft: 10,
-    padding: 10
-  },
-  container: {
-    backgroundColor: '#333',
-    flex: 1
-  },
-  errorText: {
-    color: 'red',
-    marginBottom: 20,
-    marginLeft: 20
-  },
-  input: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    color: '#f9f9f9',
-    flex: 1,
-    height: 40,
-    paddingHorizontal: 10
-  },
-  inputContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 20,
-    marginHorizontal: 20
-  },
-  label: {
-    color: '#f9f9f9',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 20,
-    marginVertical: 20
-  },
-  loaderContainer: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center'
-  },
-  parkImage: {
-    borderRadius: 5,
-    height: 200,
-    marginBottom: 10,
-    objectFit: 'cover',
-    width: '100%'
-  },
-  parkItem: {
-    backgroundColor: '#f9f9f9',
-    borderRadius: 5,
-    marginBottom: 20,
-    marginHorizontal: 20,
-    padding: 10
-  },
-  parkName: {
-    fontSize: 18,
-    fontWeight: 'bold'
-  }
-});

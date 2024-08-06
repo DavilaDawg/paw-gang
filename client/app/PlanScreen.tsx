@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useFocusEffect } from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const SERVER_URL = 'http://localhost:3000'
+const SERVER_URL = 'http://localhost:3000';
 interface Event {
   _id: string;
   park_name: string;
@@ -105,23 +105,24 @@ function PlanScreen(): JSX.Element {
       Alert.alert('Error', 'An error occurred while updating the event.');
     }
   };
-
   const renderItem = ({ item }: { item: Event }) => (
-    <View style={styles.eventItem}>
-      <Text style={styles.eventText}>Park Name: {item.park_name}</Text>
-      <Text style={styles.eventText}>Address: {item.address}</Text>
-      <Text style={styles.eventText}>
+    <View className="bg-gray-300 rounded p-4 my-2 mx-4 relative">
+      <Text className="text-base text-black mb-1">
+        Park Name: {item.park_name}
+      </Text>
+      <Text className="text-base text-black mb-1">Address: {item.address}</Text>
+      <Text className="text-base text-black mb-1">
         Date:{' '}
         {moment(item.date).tz('Europe/Madrid').format('MMMM Do YYYY, HH:mm')}
       </Text>
       <TouchableOpacity
-        style={styles.editButton}
+        className="bg-orange-500 w-[30px] h-[30px] rounded-full justify-center items-center absolute bottom-2.5 right-[50px]"
         onPress={() => handleEdit(item)}
       >
         <Icon name="hammer-outline" size={20} color="#fff" />
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.deleteButton}
+        className="bg-red-500 w-[30px] h-[30px] rounded-full justify-center items-center absolute bottom-2.5 right-2.5"
         onPress={() => handleDelete(item._id)}
       >
         <Icon name="trash" size={20} color="#fff" />
@@ -131,20 +132,22 @@ function PlanScreen(): JSX.Element {
 
   if (loading) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Loading...</Text>
+      <View className="flex-1 items-center justify-center bg-gray-800">
+        <Text className="text-white text-xl top-[50px]">Loading...</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 items-center justify-center bg-gray-800">
       <FlatList
         data={events}
         renderItem={renderItem}
         keyExtractor={item => item._id}
         ListEmptyComponent={
-          <Text style={styles.text}>No upcoming events found</Text>
+          <Text className="text-white text-xl top-[50px]">
+            No upcoming events found
+          </Text>
         }
       />
       <DateTimePickerModal
@@ -159,52 +162,3 @@ function PlanScreen(): JSX.Element {
 }
 
 export default PlanScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    backgroundColor: '#333',
-    flex: 1,
-    justifyContent: 'center'
-  },
-  text: {
-    color: '#fff',
-    fontSize: 20,
-    top: 50
-  },
-  eventItem: {
-    backgroundColor: '#ccc',
-    borderRadius: 5,
-    padding: 15,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    position: 'relative'
-  },
-  eventText: {
-    fontSize: 16,
-    color: '#000',
-    marginBottom: 5
-  },
-  deleteButton: {
-    backgroundColor: 'red',
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 10,
-    right: 10
-  },
-  editButton: {
-    backgroundColor: 'orange',
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'absolute',
-    bottom: 10,
-    right: 50
-  }
-});
