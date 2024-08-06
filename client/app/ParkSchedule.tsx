@@ -16,7 +16,8 @@ import axios from 'axios';
 import { ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 
-const SERVER_URL = 'http://192.0.2.123:3000';
+const isaIP = '10.10.22.20';
+const SERVER_URL = `http://${isaIP}:3000`;
 
 type ParkScheduleParams = {
   place_id: string;
@@ -103,7 +104,7 @@ function ParkSchedule({ route }: ParkScheduleProps): JSX.Element {
       park_name: name,
       address: vicinity,
       date: eventDate,
-      user: 'eugenio',
+      user: 'isa', // FIX HARDCODE
       dog_avatar:
         'https://i.ibb.co/86gL7yK/Whats-App-Image-2024-07-25-at-15-20-30-modified.png'
     };

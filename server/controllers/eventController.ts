@@ -15,7 +15,7 @@ export const getEvents = async (req: Request, res: Response): Promise<void> => {
     const events: Event[] = await models.find();
     res.status(200).json(events);
   } catch (error) {
-    res.status(500);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
@@ -42,7 +42,7 @@ export const getEventsbyUser = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { user } = req.params;
+    const user = req.params.user;
     if (!user) {
       res.status(400).json({ message: 'user is required' });
     }
