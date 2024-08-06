@@ -9,13 +9,13 @@ import ParkSchedule from './ParkSchedule';
 import Login from './Login';
 import ProfileScreen from './ProfileScreen';
 import React from 'react';
-
+import SignUp from './SignUp';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const LogoHeader: React.FC = () => {
   return (
-    <View className="h-16">
+    <View className="h-[75] w-[125] justify-center self-center ">
       <Image source={require('../assets/logo.jpg')} className="w-full h-full" />
     </View>
   );
@@ -93,6 +93,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="Main" component={MainTabs} />
       </Stack.Navigator>
     </NavigationContainer>
