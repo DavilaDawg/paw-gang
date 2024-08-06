@@ -93,32 +93,35 @@ describe("Event Controller Integration Tests", () => {
     expect(response.body[0].user).toBe(mockEvent.user);
   });
 
-  it('should edit an event', async () => {
+  it("should edit an event", async () => {
     const createResponse = await request(app)
-      .post('/events')
+      .post("/events")
       .send(mockEvent)
       .expect(201);
-  
+
     const eventId = createResponse.body._id;
-  
+
     const updatedDate = new Date().toISOString();
-  
+
     const updateResponse = await request(app)
       .put(`/events/${eventId}`)
       .send({ date: updatedDate })
       .expect(200);
-  
-    const receivedDate = new Date(updateResponse.body.updatedEvent.date).toISOString();
-    
-    const tolerance = 1000; 
+
+    const receivedDate = new Date(
+      updateResponse.body.updatedEvent.date
+    ).toISOString();
+
+    const tolerance = 1000;
     const updatedDateTime = new Date(updatedDate).getTime();
     const receivedDateTime = new Date(receivedDate).getTime();
-    
-    expect(Math.abs(updatedDateTime - receivedDateTime)).toBeLessThanOrEqual(tolerance);
-    expect(updateResponse.body.message).toBe('Event updated successfully');
-    expect(updateResponse.body.updatedEvent).toHaveProperty('_id', eventId);
+
+    expect(Math.abs(updatedDateTime - receivedDateTime)).toBeLessThanOrEqual(
+      tolerance
+    );
+    expect(updateResponse.body.message).toBe("Event updated successfully");
+    expect(updateResponse.body.updatedEvent).toHaveProperty("_id", eventId);
   });
-  
 
   it("should delete an event", async () => {
     const { body } = await request(app)

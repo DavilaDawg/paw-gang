@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { User } from "../models/users";
 import { BlockedUser } from "../models/blockedUsers";
-import { destroySession } from '../controllers/authController';
+import { destroySession } from "../controllers/authController";
 
 jest.mock("jsonwebtoken");
 jest.mock("../models/users");
@@ -16,9 +16,9 @@ const SUPER_SECRET_KEY = process.env.JWT_SECRET || "default_key";
 
 const mockedJwt = jwt as jest.Mocked<typeof jwt>;
 const mockToken = jwt.sign(
-  { userId: "validUserId" },        // Payload
-  SUPER_SECRET_KEY,                 // Key
-  { expiresIn: "1h" }               // Options
+  { userId: "validUserId" }, // Payload
+  SUPER_SECRET_KEY, // Key
+  { expiresIn: "1h" } // Options
 );
 mockedJwt.verify.mockImplementation(() => ({ userId: "mockedUserId" }));
 
@@ -134,30 +134,29 @@ describe("Session Controller", () => {
     });
   });
 
-  
-describe('destroySession', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
+  describe("destroySession", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it("should create and save a blocked user with the provided token", async () => {
+      const mockToken = "test_token";
+      const mockSave = jest.fn().mockResolvedValueOnce(undefined);
+      (BlockedUser.prototype.save as jest.Mock) = mockSave;
+
+      await destroySession(mockToken);
+
+      expect(BlockedUser).toHaveBeenCalledWith({ token: mockToken });
+      expect(mockSave).toHaveBeenCalled();
+    });
+
+    it("should handle errors during save operation", async () => {
+      const mockToken = "test_token";
+      const mockError = new Error("Save failed");
+      const mockSave = jest.fn().mockRejectedValueOnce(mockError);
+      (BlockedUser.prototype.save as jest.Mock) = mockSave;
+
+      await expect(destroySession(mockToken)).rejects.toThrow("Save failed");
+    });
   });
-
-  it('should create and save a blocked user with the provided token', async () => {
-    const mockToken = 'test_token';
-    const mockSave = jest.fn().mockResolvedValueOnce(undefined);
-    (BlockedUser.prototype.save as jest.Mock) = mockSave;
-
-    await destroySession(mockToken);
-
-    expect(BlockedUser).toHaveBeenCalledWith({ token: mockToken });
-    expect(mockSave).toHaveBeenCalled();
-  });
-
-  it('should handle errors during save operation', async () => {
-    const mockToken = 'test_token';
-    const mockError = new Error('Save failed');
-    const mockSave = jest.fn().mockRejectedValueOnce(mockError);
-    (BlockedUser.prototype.save as jest.Mock) = mockSave;
-
-    await expect(destroySession(mockToken)).rejects.toThrow('Save failed');
-  });
-});
 });
