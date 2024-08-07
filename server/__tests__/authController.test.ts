@@ -16,9 +16,9 @@ const SUPER_SECRET_KEY = process.env.JWT_SECRET || "default_key";
 
 const mockedJwt = jwt as jest.Mocked<typeof jwt>;
 const mockToken = jwt.sign(
-  { userId: "validUserId" }, // Payload
-  SUPER_SECRET_KEY, // Key
-  { expiresIn: "1h" } // Options
+  { userId: "validUserId" },
+  SUPER_SECRET_KEY, 
+  { expiresIn: "1h" } 
 );
 mockedJwt.verify.mockImplementation(() => ({ userId: "mockedUserId" }));
 

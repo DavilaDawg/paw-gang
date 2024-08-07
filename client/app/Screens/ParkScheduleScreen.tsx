@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Button, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, TouchableOpacity, Text, Alert } from 'react-native';
 import moment from 'moment-timezone';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { ParamListBase } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import DateSelector from '../ParkSchedule/DateSelector';
 import EventList from '../ParkSchedule/EventList';
 import AddEventModal from '../ParkSchedule/AddEvent';
 import { fetchEvents, saveEvent } from '../ParkSchedule/Event';
-import { Event, ParkScheduleParams } from '../types/types';
+import { Event, ParkScheduleParams } from '../Types/types';
 
 type ParkScheduleProps = NativeStackScreenProps<ParamListBase, 'ParkSchedule'>;
 
