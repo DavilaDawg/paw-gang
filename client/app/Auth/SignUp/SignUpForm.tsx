@@ -56,8 +56,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       const responseData = await response.json();
 
       const userId = responseData.userId
-
-      console.log(responseData)
       
       await AsyncStorage.setItem('userId', userId);
 

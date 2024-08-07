@@ -159,7 +159,6 @@ export const deleteUser = async (
   res: Response
 ): Promise<void> => {
   const { userId } = req.params;
-  console.log("Received delete request for userId:", userId);
 
   try {
     const user = await Model.findOneAndDelete({ userId });
