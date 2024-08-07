@@ -4,8 +4,6 @@ import { Alert } from 'react-native';
 import { Event } from '../Types/types';
 import 'dotenv/config';
 
-const IP = process.env.IP
-
 const SERVER_URL = `http://10.0.2.2:3000`;
 
 export const fetchEvents = async (
