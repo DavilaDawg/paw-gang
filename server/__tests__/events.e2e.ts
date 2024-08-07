@@ -2,7 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import mongoose from 'mongoose';
 import models from '../models/events';
-import * as eventController from '../controllers/eventsController';
+import * as eventController from '../controllers/eventController';
 
 // Create an Express app
 const app = express();
@@ -19,7 +19,7 @@ app.put('/events/:_id', eventController.editEvent);
 // Test setup
 beforeAll(async () => {
   // Connect to the test database
-  await mongoose.connect('mongodb://localhost:27017/events_test')
+  await mongoose.connect('mongodb://localhost:27017/events_test');
 });
 
 afterAll(async () => {
@@ -34,16 +34,14 @@ describe('Event API Endpoints', () => {
 
   // Test POST /events
   it('should create a new event', async () => {
-    const response = await request(app)
-      .post('/events')
-      .send({
-        place_id: '12345',
-        park_name: 'Central Park',
-        address: '123 Park Ave',
-        date: new Date(),
-        user: 'user123',
-        dog_avatar: 'http://example.com/avatar.png',
-      });
+    const response = await request(app).post('/events').send({
+      place_id: '12345',
+      park_name: 'Central Park',
+      address: '123 Park Ave',
+      date: new Date(),
+      user: 'user123',
+      dog_avatar: 'http://example.com/avatar.png'
+    });
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty('place_id', '12345');
@@ -81,7 +79,10 @@ describe('Event API Endpoints', () => {
       .send({ date: new Date() });
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Event updated successfully');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Event updated successfully'
+    );
     expect(response.body.updatedEvent).toHaveProperty('date');
   });
 
@@ -90,6 +91,9 @@ describe('Event API Endpoints', () => {
     const response = await request(app).delete(`/events/${eventId}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('message', 'Event deleted successfully');
+    expect(response.body).toHaveProperty(
+      'message',
+      'Event deleted successfully'
+    );
   });
 });
