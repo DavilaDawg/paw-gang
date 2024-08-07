@@ -7,6 +7,7 @@ const {
   deleteEvent,
   editEvent,
 } = require("./controllers/eventController");
+
 const router = express.Router();
 
 router.get("/events/", getEvents);
@@ -15,5 +16,7 @@ router.get("/events/user/:user", getEventsbyUser);
 router.post("/events", postEvents);
 router.delete("/events/:_id", deleteEvent);
 router.put("/events/:_id", editEvent);
+
+router.post("/users/:user")
 
 export default router;
