@@ -25,6 +25,6 @@ router.post("/users", signUp)
 
 router.post("/sessions", createSession); // login
 router.get("/sessions/:token", getSession); // verify token
-router.post("/sessions/:token", destroySession); // logout
+router.delete("/sessions/:token", destroySession); // logout
 
 export default router;
