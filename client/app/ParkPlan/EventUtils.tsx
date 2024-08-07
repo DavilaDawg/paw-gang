@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { Event } from '../Types/types';
 import 'dotenv/config';
 
-const SERVER_URL = `http://10.0.2.2:3000`;
+const SERVER_URL = `http://localhost:3000`;
 
 export const fetchEvents = async (
   setEvents: React.Dispatch<React.SetStateAction<Event[]>>,
