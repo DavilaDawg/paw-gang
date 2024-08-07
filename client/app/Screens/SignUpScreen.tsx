@@ -30,9 +30,6 @@ const SignUpScreen: React.FC<SignUpProps> = ({ navigation }) => {
     confirmPassword: ''
   });
 
-  const handleSignUp = () => {
-    navigation.replace('Main');
-  };
 
   const handleLogin = () => {
     navigation.navigate('Login');
@@ -42,9 +39,9 @@ const SignUpScreen: React.FC<SignUpProps> = ({ navigation }) => {
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
       <View className="py-6 px-0 flex-1">
         <SignUpLogo />
-        <SignUpForm form={form} setForm={setForm} handleSignUp={handleSignUp} />
-        <LoginPrompt handleLogin={handleLogin} />
-      </View>
+        <SignUpForm form={form} setForm={setForm} navigation={navigation} />
+        <LoginPrompt handleLogin={handleLogin} />     
+     </View>
     </SafeAreaView>
   );
 };

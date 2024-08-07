@@ -25,3 +25,9 @@ export type Event = {
   user: string;
   dog_avatar: string;
 };
+
+export type RootStackParams = {
+  Login: undefined;
+  SignUp: undefined;
+  Main: undefined;
+};

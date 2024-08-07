@@ -1,19 +1,62 @@
 import React from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { RootStackParams } from '../../Types/types'
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface LoginFormProps {
   form: { email: string; password: string };
   setForm: React.Dispatch<
     React.SetStateAction<{ email: string; password: string }>
   >;
-  handleSignIn: () => void;
+  navigation: StackNavigationProp<RootStackParams, 'Login'>;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
   form,
   setForm,
-  handleSignIn
-}) => (
+  navigation
+}) => {
+  
+  const handleSignIn = async () => {
+    const { email, password } = form;
+
+    if (!email || !password) {
+      Alert.alert('Error', 'Email and password are required.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://10.10.22.20:3000/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        Alert.alert('Error', errorData.error || 'Login failed.');
+        return;
+      }
+
+      const responseData = await response.json();
+      const token = responseData.token;
+
+      const verifyResponse = await fetch(`http://10.10.22.20:3000/sessions/${token}`);
+      if (!verifyResponse.ok) {
+        Alert.alert('Error', 'Failed to verify token.');
+        return;
+      }
+
+      navigation.navigate('Main');
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred. Please try again.');
+      console.error('Error signing in:', error);
+    }
+  }
+
+  return (
   <View className="mb-6 px-6 flex-1">
     <View className="mb-4">
       <Text className="text-lg font-semibold text-black mb-2">
@@ -57,6 +100,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
       Forgot password?
     </Text>
   </View>
-);
+)};
 
 export default LoginForm;
