@@ -1,7 +1,7 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
 import { Event } from '../Types/types';
-const SERVER_URL = `http://localhost:3000`;
+const SERVER_URL = `http://10.0.2.2:3000`;
 
 export const fetchEvents = async (
   place_id: string,
