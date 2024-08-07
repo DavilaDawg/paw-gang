@@ -34,6 +34,18 @@ function SearchScreen() {
     navigation.navigate('ParkSchedule', { place_id, name, vicinity });
   };
 
+  const handleShowDirections = (
+    latitude: number,
+    longitude: number,
+    name: string
+  ) => {
+    navigation.navigate('MapScreen', {
+      destinationLat: latitude,
+      destinationLng: longitude,
+      destinationName: name
+    });
+  };
+
   return (
     <View className="flex-1 bg-gray-800">
       <Text className="text-lg font-bold text-gray-100 mx-5 my-5">
@@ -59,6 +71,7 @@ function SearchScreen() {
             item={item}
             apiKey={apiKey}
             handlePlanVisit={handlePlanVisit}
+            handleShowDirections={handleShowDirections}
           />
         )}
       />
@@ -67,3 +80,5 @@ function SearchScreen() {
 }
 
 export default SearchScreen;
+
+// `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=${API_KEY}`;

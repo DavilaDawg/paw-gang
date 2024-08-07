@@ -1,14 +1,27 @@
 export type RootStackParamList = {
   ParkSchedule: { place_id: string; name: string; vicinity: string };
+  MapScreen: {
+    destinationLat: number;
+    destinationLng: number;
+    destinationName: string;
+  };
 };
 
-export type DogPark = {
+export interface DogPark {
   place_id: string;
   name: string;
   vicinity: string;
   rating: number;
-  photos?: Array<{ photo_reference: string }>;
-};
+  photos?: {
+    photo_reference: string;
+  }[];
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
+}
 
 export type ParkScheduleParams = {
   place_id: string;

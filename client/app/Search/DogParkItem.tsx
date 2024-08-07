@@ -7,12 +7,18 @@ interface DogParkItemProps {
   item: DogPark;
   apiKey: string;
   handlePlanVisit: (place_id: string, name: string, vicinity: string) => void;
+  handleShowDirections: (
+    latitude: number,
+    longitude: number,
+    name: string
+  ) => void;
 }
 
 const DogParkItem: React.FC<DogParkItemProps> = ({
   item,
   apiKey,
-  handlePlanVisit
+  handlePlanVisit,
+  handleShowDirections
 }) => {
   const getPhotoUrl = (photoReference: string) => {
     return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
@@ -30,11 +36,20 @@ const DogParkItem: React.FC<DogParkItemProps> = ({
       <Text>{item.vicinity}</Text>
       <Text>Rating: {item.rating}</Text>
       <CustomButton
+        title="Get directions 📍"
+        onPress={() =>
+          handleShowDirections(
+            item.geometry.location.lat,
+            item.geometry.location.lng,
+            item.name
+          )
+        }
+      />
+      <CustomButton
         title="Plan visit 🐾"
         onPress={() => handlePlanVisit(item.place_id, item.name, item.vicinity)}
       />
     </View>
   );
 };
-
 export default DogParkItem;
