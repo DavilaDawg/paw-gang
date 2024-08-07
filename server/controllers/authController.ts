@@ -28,7 +28,6 @@ export const createSession = async (
     const user = await User.findById(userId);
 
     if (!user) {
-      console.error("User not found");
       res.status(404).json({ error: "User not found" });
       return;
     }
