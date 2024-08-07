@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParams } from "../../Types/types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface SignUpFormProps {
   form: {
@@ -54,10 +55,11 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
       const responseData = await response.json();
 
-      console.log(responseData)
+      const userId = responseData.userId
 
-      // await AsyncStorage.setItem('userToken', token);
-      // await AsyncStorage.setItem('userId', userId);
+      console.log(responseData)
+      
+      await AsyncStorage.setItem('userId', userId);
 
       Alert.alert("Success", "User registered successfully.");
       navigation.navigate("Main");
