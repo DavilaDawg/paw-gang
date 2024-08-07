@@ -20,10 +20,6 @@ interface LoginProps {
 const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
   const [form, setForm] = useState({ email: '', password: '' });
 
-  const handleSignIn = () => {
-    navigation.replace('Main');
-  };
-
   const handleSignUp = () => {
     navigation.navigate('SignUp');
   };

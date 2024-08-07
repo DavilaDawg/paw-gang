@@ -11,14 +11,20 @@ const profiles = [
   }
 ];
 
-const ProfileInfo: React.FC = () => (
+interface ProfileInfoProps {
+  userId: string | null;
+}
+
+
+
+const ProfileInfo: React.FC<ProfileInfoProps> = ({userId}) => (
   <View className="flex-1 justify-center items-center">
     <Image
       source={require('../../assets/avatar-Luffy.png')}
       className="w-52 h-52 rounded-full border-2 border-white mb-5"
     />
     <Text className="text-white font-bold text-xl mb-2">
-      User: {profiles[0].username}
+      User: {userId}
     </Text>
     <Text className="text-white font-bold text-xl mb-2">
       Name: {profiles[0].name}

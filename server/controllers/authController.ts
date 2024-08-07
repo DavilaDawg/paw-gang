@@ -153,3 +153,49 @@ export const signUp = async (
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { userId } = req.params;
+  console.log("Received delete request for userId:", userId);
+
+  try {
+    const user = await Model.findOneAndDelete({ userId });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+  const { token } = req.params;
+
+  try {
+    const decoded = jwt.verify(token, SUPER_SECRET_KEY) as { userId: string };
+
+    if (!decoded || !decoded.userId) {
+      res.status(401).json({ message: "Invalid token" });
+      return;
+    }
+
+    const user = await Model.findOne({ userId: decoded.userId }, { password: 0 });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

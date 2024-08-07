@@ -53,6 +53,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       }
 
       const responseData = await response.json();
+
+      console.log(responseData)
+
+      // await AsyncStorage.setItem('userToken', token);
+      // await AsyncStorage.setItem('userId', userId);
+
       Alert.alert("Success", "User registered successfully.");
       navigation.navigate("Main");
     } catch (error) {
