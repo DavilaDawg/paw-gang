@@ -27,7 +27,7 @@ export const fetchEvents = async (
     );
     setEvents(formattedEvents);
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events fetchEvents1:', error);
   }
 };
 

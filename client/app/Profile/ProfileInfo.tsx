@@ -1,33 +1,24 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
+import { ProfileInfoProps } from '../Types/types';
 
-const profiles = [
-  {
-    avatar: require('../../assets/avatar-Luffy.png'),
-    username: 'testuser',
-    name: 'Eugenio',
-    dogName: 'Luffy',
-    email: 'test@test.com'
-  }
-];
-
-const ProfileInfo: React.FC = () => (
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ profile }) => (
   <View className="flex-1 justify-center items-center">
     <Image
-      source={require('../../assets/avatar-Luffy.png')}
+      source={profile.avatar}
       className="w-52 h-52 rounded-full border-2 border-white mb-5"
     />
     <Text className="text-white font-bold text-xl mb-2">
-      User: {profiles[0].username}
+      User: {profile.username}
     </Text>
     <Text className="text-white font-bold text-xl mb-2">
-      Name: {profiles[0].name}
+      Name: {profile.name}
     </Text>
     <Text className="text-white font-bold text-xl mb-2">
-      Dog Name: {profiles[0].dogName}
+      Dog Name: {profile.dogName}
     </Text>
     <Text className="text-white font-bold text-xl mb-2">
-      Email: {profiles[0].email}
+      Email: {profile.email}
     </Text>
   </View>
 );

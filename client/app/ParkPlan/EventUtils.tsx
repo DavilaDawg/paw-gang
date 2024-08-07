@@ -28,7 +28,7 @@ export const fetchEvents = async (
 
     setEvents(upcomingEvents);
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching events fetchEvents2:', error);
   } finally {
     setLoading(false);
   }
