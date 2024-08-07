@@ -2,15 +2,18 @@ import axios from 'axios';
 import moment from 'moment-timezone';
 import { Alert } from 'react-native';
 import { Event } from '../Types/types';
+import 'dotenv/config';
 
-const SERVER_URL = `http://localhost:3000`;
+const IP = process.env.IP
+
+const SERVER_URL = `http://10.0.2.2:3000`;
 
 export const fetchEvents = async (
   setEvents: React.Dispatch<React.SetStateAction<Event[]>>,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   try {
-    const response = await axios.get<Event[]>(`${SERVER_URL}/events/user/isa`);
+    const response = await axios.get<Event[]>(`${SERVER_URL}/events/user/testUser`);
     const currentTime = moment().tz('Europe/Madrid');
     const upcomingEvents = response.data.filter(event =>
       moment(event.date)

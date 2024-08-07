@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import EventItem from '../ParkPlan/PlanEvent';
 import TimePickerModal from '../ParkPlan/TimePicker';
 import { fetchEvents, deleteEvent, updateEvent } from '../ParkPlan/EventUtils';
-import { Event } from '../types/types';
+import { Event } from '../Types/types';
 
 function PlanScreen(): JSX.Element {
   const [events, setEvents] = useState<Event[]>([]);

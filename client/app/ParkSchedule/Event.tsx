@@ -1,8 +1,11 @@
 import axios from 'axios';
 import moment from 'moment-timezone';
-import { Event } from '../types/types';
+import { Event } from '../Types/types';
+import 'dotenv/config';
 
-const SERVER_URL = `http://localhost:3000`;
+const IP = process.env.IP
+
+const SERVER_URL = `http://10.0.2.2:3000`;
 
 export const fetchEvents = async (
   place_id: string,
@@ -53,7 +56,7 @@ export const saveEvent = async (
     park_name: name,
     address: vicinity,
     date: eventDate,
-    user: 'isa', // FIX HARDCODE
+    user: 'testUser',
     dog_avatar:
       'https://i.ibb.co/86gL7yK/Whats-App-Image-2024-07-25-at-15-20-30-modified.png'
   };
