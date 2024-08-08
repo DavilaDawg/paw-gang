@@ -53,7 +53,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       }
 
       const users = await response1.json();
-      console.log(users);
 
       const userExists = users.some(
         (user: { userId: string }) => user.userId === email

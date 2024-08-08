@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { RootStackParams } from "../../Types/types";
 import { StackNavigationProp } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createSession } from "../../services/authService";
+import { createSession, verifySession } from "../../services/authService";
 
 interface LoginFormProps {
   form: { email: string; password: string };
@@ -25,21 +25,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ form, setForm, navigation }) => {
     try {
       const token = await createSession({ email, password });
 
-      const verifyResponse = await fetch(
-        `http://10.10.22.20:3000/sessions/${token}`
-      );
+      if (token) {
+        const response = await verifySession({ token });
 
-      if (!verifyResponse.ok) {
-        Alert.alert("Error", "Failed to verify token.");
-        return;
+        if (response)
+        navigation.navigate("Main");
+      } else {
+        console.log("Failed to create session.");
       }
-      const verifyResponseData = await verifyResponse.json();
 
-      const userId = verifyResponseData.userId;
-
-      await AsyncStorage.setItem("userId", userId);
-
-      navigation.navigate("Main");
     } catch (error) {
       Alert.alert("Error", "An error occurred. Please try again.");
       console.error("Error signing in:", error);
