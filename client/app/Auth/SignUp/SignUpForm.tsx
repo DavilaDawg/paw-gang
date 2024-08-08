@@ -39,7 +39,21 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     }
 
     try {
-      const response = await fetch("http://10.10.22.20:3000/users", {
+      const response2 = await fetch("http://10.10.22.20:3000/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: email, password }),
+      });
+
+      if (!response2.ok) {
+        const errorData = await response2.json();
+        Alert.alert("Error", errorData.error || "Sign-up failed.");
+        return;
+      }
+
+      const response = await fetch("http://10.10.22.20:3000/sessions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,14 +63,26 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json();
-        Alert.alert("Error", errorData.error || "Sign-up failed.");
+        Alert.alert("Error", errorData.error || "Login failed.");
         return;
       }
 
       const responseData = await response.json();
+      const token = responseData.token;
 
-      const userId = responseData.userId
-      
+      const verifyResponse = await fetch(
+        `http://10.10.22.20:3000/sessions/${token}`
+      );
+
+      if (!verifyResponse.ok) {
+        Alert.alert("Error", "Failed to verify token.");
+        return;
+      }
+      const verifyResponseData = await verifyResponse.json();
+
+      const userId = verifyResponseData.userId;
+
+      await AsyncStorage.setItem('userToken', token);
       await AsyncStorage.setItem('userId', userId);
 
       Alert.alert("Success", "User registered successfully.");
