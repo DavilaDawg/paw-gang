@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { RootStackParams } from "../../Types/types";
 import { StackNavigationProp } from "@react-navigation/stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSession, verifySession } from "../../services/authService";
 
 interface LoginFormProps {

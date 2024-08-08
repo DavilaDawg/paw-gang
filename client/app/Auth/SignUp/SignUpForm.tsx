@@ -2,8 +2,12 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParams } from "../../Types/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { checkUsers, addUserToDB } from "../../services/authService";
+import {
+  checkUsers,
+  addUserToDB,
+  createSession,
+  verifySession,
+} from "../../services/authService";
 
 interface SignUpFormProps {
   form: {
@@ -55,40 +59,15 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         const added = await addUserToDB({ email, password });
 
         if (added) {
-          const response = await fetch("http://10.10.22.20:3000/sessions", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ userId: email, password }),
-          });
+          const token = await createSession({ email, password });
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            Alert.alert("Error", errorData.error || "Login failed.");
-            return;
+          if (token) {
+            const response = await verifySession({ token });
+
+            if (response) navigation.navigate("Main");
+          } else {
+            console.log("Failed to create session.");
           }
-
-          const responseData = await response.json();
-          const token = responseData.token;
-
-          const verifyResponse = await fetch(
-            `http://10.10.22.20:3000/sessions/${token}`
-          );
-
-          if (!verifyResponse.ok) {
-            Alert.alert("Error", "Failed to verify token.");
-            return;
-          }
-          const verifyResponseData = await verifyResponse.json();
-
-          const userId = verifyResponseData.userId;
-
-          await AsyncStorage.setItem("userToken", token);
-          await AsyncStorage.setItem("userId", userId);
-
-          Alert.alert("Success", "User registered successfully.");
-          navigation.navigate("Main");
         }
       }
     } catch (error) {
