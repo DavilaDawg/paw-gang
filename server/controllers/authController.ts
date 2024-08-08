@@ -80,6 +80,7 @@ export const getSession = async (
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
       console.log("Token has expired.");
+      res.status(401).json({ error: "Token has expired" }); 
     } else if (error instanceof jwt.JsonWebTokenError) {
       console.error("Invalid token:", error.message);
       res.status(401).json({ error: "Invalid token" });

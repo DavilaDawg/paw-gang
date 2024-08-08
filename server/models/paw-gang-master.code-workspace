@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"name": "client",
+			"path": "../../client"
+		},
+		{
+			"name": "server",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"jest.disabledWorkspaceFolders": [
+			"paw-gang-master"
+		]
+	}
+}
