@@ -4,6 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import LoginLogo from '../Auth/Login/LoginLogo';
 import LoginForm from '../Auth/Login/LoginForm';
 import SignUpPrompt from '../Auth/Login/SignUpPrompt';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type RootStackParams = {
   Login: undefined;
@@ -30,11 +31,17 @@ const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
-      <View className="py-6 px-0 flex-1">
-        <LoginLogo />
-        <LoginForm form={form} setForm={setForm} handleSignIn={handleSignIn} />
-        <SignUpPrompt handleSignUp={handleSignUp} />
-      </View>
+      <ScrollView className="flex-1">
+        <View className="py-6 px-0 flex-1">
+          <LoginLogo />
+          <LoginForm
+            form={form}
+            setForm={setForm}
+            handleSignIn={handleSignIn}
+          />
+          <SignUpPrompt handleSignUp={handleSignUp} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
