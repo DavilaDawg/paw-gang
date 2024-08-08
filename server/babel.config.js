@@ -1,3 +1,14 @@
 module.exports = {
-  presets: [['@babel/preset-env', { targets: { node: 'current' } }]]
+  presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+  plugins: [
+    ['module:react-native-dotenv'],
+    {
+      moduleName: '@env',
+      path: '.env',
+      blacklist: null,
+      whitelist: null,
+      safe: false,
+      allowUndefined: true
+    }
+  ]
 };

@@ -1,43 +1,201 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { Request, Response } from "express";
+import Model from "../models/users";
+import { BlockedUser } from "../models/blockedUsers";
+import crypto from "crypto";
 
-const SUPER_SECRET_KEY: string = "yolo"
-const blockedList: Set<string>= new Set(); // Set has good performance on lookups
+dotenv.config();
 
-interface Session {
-    expiresAt: number,
-    userId: string,
+const SUPER_SECRET_KEY: string = process.env.JWT_SECRET || "default_key";
+interface User {
+  userId: string;
+  password: string;
+}
+interface JWTPayload {
+  userId: string;
+  iat?: number;
+  exp?: number;
 }
 
-export const createSession = (username: string): string => {
-    const expiry: Date = new Date();
-    expiry.setMonth(expiry.getMonth() + 1)
+export const createSession = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { userId, password } = req.body;
 
-    const newSession : Session = { // no sessionID needed because session data is stored in token 
-        expiresAt: expiry.valueOf(),
-        userId: username,
+  if (!userId || !password) {
+    res.status(400).json({ error: "User ID and password is required" }); // change text in test!!
+    return;
+  }
+
+  try {
+    const user = await Model.findOne({ userId });
+
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
     }
 
-    return jwt.sign(newSession, SUPER_SECRET_KEY)
-}
+    const [salt, storedHash] = user.password.split(":");
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 1000, 64, "sha512")
+      .toString("hex");
 
-export const getSession = (token: string): Session | undefined => {
-    if (blockedList.has(token)) return undefined
-
-    try {
-        const decoded = jwt.verify(token, SUPER_SECRET_KEY) as Session
-
-        if (decoded.expiresAt < Date.now()) {
-            console.log("Token has expired.")
-            return undefined
-        }
-
-        return decoded
-    } catch (error) {
-        console.error("Invalid token:", error);
-        return undefined;
+    if (hash !== storedHash) {
+      res.status(401).json({ error: "Invalid credentials" });
+      return;
     }
-}
 
-export const destroySession = (token: string): void => {
-    blockedList.add(token)
-}
+    const payload: JWTPayload = { userId };
+    const token = jwt.sign(payload, SUPER_SECRET_KEY, { expiresIn: "1h" });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.error("Error creating session:", error.message, error.stack);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const getSession = async (
+  req: Request,
+  res: Response
+): Promise<JWTPayload | null> => {
+  const { token } = req.params;
+
+  if (!token) {
+    res.status(400).json({ error: "Token is required" });
+    return;
+  }
+
+  try {
+    const blockedToken = await BlockedUser.findOne({ token });
+
+    if (blockedToken) {
+      res.status(403).json({ error: "Token is blocked" });
+      return;
+    }
+
+    const decoded = jwt.verify(token, SUPER_SECRET_KEY) as JWTPayload;
+    res.status(200).json({ valid: true, userId: decoded.userId });
+  } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      console.log("Token has expired.");
+      res.status(401).json({ error: "Token has expired" }); 
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      console.error("Invalid token:", error.message);
+      res.status(401).json({ error: "Invalid token" });
+    } else {
+      console.error("Error verifying token:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+};
+
+export const destroySession = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { token } = req.params;
+
+  try {
+    const existingToken = await BlockedUser.findOne({ token });
+    if (existingToken) {
+      res.status(200).json({ message: "Token already blocked" });
+      return;
+    }
+
+    const blockedUser = new BlockedUser({ token });
+    await blockedUser.save();
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting token:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users: User[] = await Model.find({}, { password: 0 });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const signUp = async (
+  req: Request<{}, {}, User>,
+  res: Response
+): Promise<void> => {
+  try {
+    const { userId, password } = req.body;
+
+    if (!userId || !password) {
+      res.status(400).json({ error: "Missing required parameters." });
+    }
+
+    const salt = crypto.randomBytes(16).toString("hex");
+    const hash = crypto
+      .pbkdf2Sync(password, salt, 1000, 64, "sha512")
+      .toString("hex");
+
+    const newUser: User = await Model.create({
+      userId,
+      password: `${salt}:${hash}`,
+    });
+
+    res.status(201);
+    res.json({
+      userId: newUser.userId,
+      message: "User created successfully",
+    });
+  } catch (error) {
+    console.error("Internal server error");
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { userId } = req.params;
+
+  try {
+    const user = await Model.findOneAndDelete({ userId });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+export const getUser = async (req: Request, res: Response): Promise<void> => {
+  const { token } = req.params;
+
+  try {
+    const decoded = jwt.verify(token, SUPER_SECRET_KEY) as { userId: string };
+
+    if (!decoded || !decoded.userId) {
+      res.status(401).json({ message: "Invalid token" });
+      return;
+    }
+
+    const user = await Model.findOne({ userId: decoded.userId }, { password: 0 });
+
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

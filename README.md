@@ -9,12 +9,12 @@ PawGang is a unique mobile application designed for dog owners who want to sched
    - cd client, npm i, then cd ../server and npm i again.
 
 2. **Set an .env file on your client folder:**
-   - Place your Google Maps API key on the .env file as it follows -> GOOGLE_MAPS_API_KEY=YOUR_KEY
+   - Place your Google Maps API key on the .env file as it follows -> 'GOOGLE_MAPS_API_KEY=YOUR_KEY'
+   - Place your Local IP Address as it follows -> Local_IP = 'YOUR_IP';
 
-3. **Replace the IP addresses with your own:**
-   - On server/index.js const LOCAL_IP_ADRESS = 'YOUR_IP';
-   - On client/PlanScreen.jsx, you need to set your IP in the SERVER_URL const.
-   - On client/ParkSchedule.jsx, you need to set your IP in the SERVER_URL const.
+3. **Get your API set-up:**
+   - Enable Google API By Going To Google Cloud.(FRee)
+   - Enable Google Directions API By Going To Google Cloud.(Free 250$ credits First Month )
 
 4. **The app has been design exclusively to work on an iOS system.**
    - I worked the whole time with an iOS simulator, so some features may not work or fit properly in an Android/Web systems.
@@ -23,7 +23,7 @@ PawGang is a unique mobile application designed for dog owners who want to sched
 
 1. **Search Nearby Dog Parks**:
    - Easily search for dog parks near your location.
-   - View park details, including photos, ratings, adress.
+   - View park details, including photos, ratings, address.
 
 2. **Locate Me**:
    - Use your current location to find the nearest dog parks with a single tap.
