@@ -104,12 +104,20 @@ const ProfileScreen: React.FC = () => {
   };
 
   const switchProfile = (index: number) => {
+    const setCurrentProfileIndex = (value: number) => {};
+
     setCurrentProfileIndex(index);
   };
 
   return (
     <View className="flex-1 bg-gray-800 pt-0">
-      <Header />
+      <Header
+        profiles={[]}
+        onAvatarPress={function (index: number): void {
+          throw new Error('Function not implemented.');
+        }}
+        currentProfileIndex={0}
+      />
       <ProfileInfo userId={userId} />
       <ActionButtons handleLogout={handleLogout} handleDelete={handleDelete} />
     </View>

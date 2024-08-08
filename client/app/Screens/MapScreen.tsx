@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
@@ -46,6 +46,7 @@ const getDirections = async (
     const points = response.data.routes[0]?.overview_polyline?.points;
     if (!points) {
       console.error('Polyline points not found in response');
+
       return null;
     }
 
@@ -133,9 +134,9 @@ function MapScreen() {
   };
 
   return (
-    <View className="container">
+    <View style={styles.container}>
       <MapView
-        className="map"
+        style={styles.map}
         showsCompass={true}
         initialRegion={{
           latitude: destinationLat,
@@ -160,13 +161,26 @@ function MapScreen() {
         {directions.length > 0 && (
           <Polyline
             coordinates={directions}
-            strokeWidth={4}
-            strokeColor="red"
+            strokeWidth={3}
+            strokeColor="#f7584a"
+            lineDashPhase={5 - 2 - 3 - 2}
           />
         )}
       </MapView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  map: {
+    width: '100%',
+    height: '100%',
+    marginTop: 20,
+    marginBottom: 20
+  }
+});
 
 export default MapScreen;

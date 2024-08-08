@@ -27,11 +27,13 @@ const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
-      <View className="py-6 px-0 flex-1">
-        <LoginLogo />
-        <LoginForm form={form} setForm={setForm} navigation={navigation} />
-        <SignUpPrompt handleSignUp={handleSignUp} />
-      </View>
+      <ScrollView className="flex-1">
+        <View className="py-6 px-0 flex-1">
+          <LoginLogo />
+          <LoginForm form={form} setForm={setForm} navigation={navigation} />
+          <SignUpPrompt handleSignUp={handleSignUp} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

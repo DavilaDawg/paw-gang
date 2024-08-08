@@ -37,11 +37,13 @@ const SignUpScreen: React.FC<SignUpProps> = ({ navigation }) => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
-      <View className="py-6 px-0 flex-1">
-        <SignUpLogo />
-        <SignUpForm form={form} setForm={setForm} navigation={navigation} />
-        <LoginPrompt handleLogin={handleLogin} />
-      </View>
+      <ScrollView className="flex-1">
+        <View className="py-6 px-0 flex-1">
+          <SignUpLogo />
+          <SignUpForm form={form} setForm={setForm} navigation={navigation} />
+          <LoginPrompt handleLogin={handleLogin} />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

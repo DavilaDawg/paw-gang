@@ -58,3 +58,30 @@ export type User = {
   userId: string;
   password: number;
 };
+export interface ProfileInfoProps {
+  profile: {
+    avatar: any;
+    username: string;
+    name: string;
+    dogName: string;
+    email: string;
+  };
+}
+export const profiles = [
+  {
+    id: 1,
+    avatar: require('../../assets/avatar-Luffy.png'),
+    username: 'testuser',
+    name: 'Eugenio',
+    dogName: 'Luffy',
+    email: 'test@test.com'
+  },
+  {
+    id: 2,
+    avatar: require('../../assets/avatar-Luffy.png'),
+    username: 'testuser2',
+    name: 'Jack',
+    dogName: 'Max',
+    email: 'jack@test.com'
+  }
+];

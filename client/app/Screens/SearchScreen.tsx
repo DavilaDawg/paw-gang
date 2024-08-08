@@ -80,5 +80,3 @@ function SearchScreen() {
 }
 
 export default SearchScreen;
-
-// `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&key=${API_KEY}`;
