@@ -5,23 +5,22 @@ const profiles = [
   {
     avatar: require('../../assets/avatar-Luffy.png'),
     username: 'testuser',
-    name: 'Eugenio',
     dogName: 'Luffy',
     email: 'test@test.com'
   }
 ];
+interface ProfileInfoProps {
+  userId: string | null;
+}
 
-const ProfileInfo: React.FC = () => (
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => (
   <View className="flex-1 justify-center items-center">
     <Image
-      source={require('../../assets/avatar-Luffy.png')}
+      source={profiles[0].avatar}
       className="w-52 h-52 rounded-full border-2 border-white mb-5"
     />
     <Text className="text-white font-bold text-xl mb-2">
-      User: {profiles[0].username}
-    </Text>
-    <Text className="text-white font-bold text-xl mb-2">
-      Name: {profiles[0].name}
+      Username: {userId}
     </Text>
     <Text className="text-white font-bold text-xl mb-2">
       Dog Name: {profiles[0].dogName}
