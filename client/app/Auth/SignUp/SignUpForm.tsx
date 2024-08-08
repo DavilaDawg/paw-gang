@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParams } from "../../Types/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { checkUsers } from "../../services/authService";
 
 interface SignUpFormProps {
   form: {
@@ -39,28 +40,18 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     }
 
     try {
-      const response1 = await fetch("http://10.10.22.20:3000/users", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const users = await checkUsers();
 
-      if (!response1.ok) {
-        const errorData = await response1.json();
-        Alert.alert("Error", errorData.error || "Sign-up failed.");
-        return;
-      }
+      if (users) {
+        const userExists = users.some(
+          (user: { userId: string }) => user.userId === email
+        );
 
-      const users = await response1.json();
-
-      const userExists = users.some(
-        (user: { userId: string }) => user.userId === email
-      );
-
-      if (userExists) {
-        Alert.alert("Error", "User already exists");
-      } else {
+        if (userExists) {
+          Alert.alert("Error", "User already exists");
+          return;
+        }
+        
         const response2 = await fetch("http://10.10.22.20:3000/users", {
           method: "POST",
           headers: {

@@ -1,4 +1,3 @@
-import React from "react";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -10,6 +9,11 @@ interface SessionProps {
 
 interface VerifyProps {
   token: string;
+}
+
+interface User {
+  userId: string;
+  password: number; //???
 }
 
 export const createSession = async ({
@@ -44,19 +48,51 @@ export const createSession = async ({
   }
 };
 
-export const verifySession = async ({ token }: VerifyProps): Promise<string | null> => {
-  const verifyResponse = await fetch(
-    `http://10.10.22.20:3000/sessions/${token}`
-  );
+export const verifySession = async ({
+  token,
+}: VerifyProps): Promise<string | null> => {
+  try {
+    const verifyResponse = await fetch(
+      `http://10.10.22.20:3000/sessions/${token}`
+    );
 
-  if (!verifyResponse.ok) {
-    Alert.alert("Error", "Failed to verify token.");
+    if (!verifyResponse.ok) {
+      Alert.alert("Error", "Failed to verify token.");
+      return null;
+    }
+    const verifyResponseData = await verifyResponse.json();
+
+    const userId = verifyResponseData.userId;
+
+    await AsyncStorage.setItem("userId", userId);
+    return "verified";
+  } catch (error) {
+    console.error("Error creating session:", error);
+    Alert.alert("Error", "An error occurred. Please try again.");
     return null;
   }
-  const verifyResponseData = await verifyResponse.json();
+};
 
-  const userId = verifyResponseData.userId;
+export const checkUsers = async (): Promise<User[] | null> => {
+  try {
+    const response1 = await fetch("http://10.10.22.20:3000/users", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  await AsyncStorage.setItem("userId", userId);
-  return "verified"
+    if (!response1.ok) {
+      const errorData = await response1.json();
+      Alert.alert("Error", errorData.error || "Sign-up failed.");
+      return null;
+    }
+
+    const users: User[] = await response1.json();
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    Alert.alert("Error", "An error occurred. Please try again.");
+    return null;
+  }
 };

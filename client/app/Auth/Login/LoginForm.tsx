@@ -28,12 +28,10 @@ const LoginForm: React.FC<LoginFormProps> = ({ form, setForm, navigation }) => {
       if (token) {
         const response = await verifySession({ token });
 
-        if (response)
-        navigation.navigate("Main");
+        if (response) navigation.navigate("Main");
       } else {
         console.log("Failed to create session.");
       }
-
     } catch (error) {
       Alert.alert("Error", "An error occurred. Please try again.");
       console.error("Error signing in:", error);
