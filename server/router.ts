@@ -19,7 +19,7 @@ router.post("/events", postEvents);
 router.delete("/events/:_id", deleteEvent);
 router.put("/events/:_id", editEvent);
 
-router.get("/users", getUsers) // for testing 
+router.get("/users", getUsers) 
 
 router.post("/users", signUp)
 router.get("/users/:token", getUser) 

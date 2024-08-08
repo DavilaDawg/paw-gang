@@ -39,54 +39,78 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     }
 
     try {
-      const response2 = await fetch("http://10.10.22.20:3000/users", {
-        method: "POST",
+      const response1 = await fetch("http://10.10.22.20:3000/users", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: email, password }),
       });
 
-      if (!response2.ok) {
-        const errorData = await response2.json();
+      if (!response1.ok) {
+        const errorData = await response1.json();
         Alert.alert("Error", errorData.error || "Sign-up failed.");
         return;
       }
 
-      const response = await fetch("http://10.10.22.20:3000/sessions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: email, password }),
-      });
+      const users = await response1.json();
+      console.log(users);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        Alert.alert("Error", errorData.error || "Login failed.");
-        return;
-      }
-
-      const responseData = await response.json();
-      const token = responseData.token;
-
-      const verifyResponse = await fetch(
-        `http://10.10.22.20:3000/sessions/${token}`
+      const userExists = users.some(
+        (user: { userId: string }) => user.userId === email
       );
 
-      if (!verifyResponse.ok) {
-        Alert.alert("Error", "Failed to verify token.");
-        return;
+      if (userExists) {
+        Alert.alert("Error", "User already exists");
+      } else {
+        const response2 = await fetch("http://10.10.22.20:3000/users", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: email, password }),
+        });
+
+        if (!response2.ok) {
+          const errorData = await response2.json();
+          Alert.alert("Error", errorData.error || "Sign-up failed.");
+          return;
+        }
+
+        const response = await fetch("http://10.10.22.20:3000/sessions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: email, password }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          Alert.alert("Error", errorData.error || "Login failed.");
+          return;
+        }
+
+        const responseData = await response.json();
+        const token = responseData.token;
+
+        const verifyResponse = await fetch(
+          `http://10.10.22.20:3000/sessions/${token}`
+        );
+
+        if (!verifyResponse.ok) {
+          Alert.alert("Error", "Failed to verify token.");
+          return;
+        }
+        const verifyResponseData = await verifyResponse.json();
+
+        const userId = verifyResponseData.userId;
+
+        await AsyncStorage.setItem("userToken", token);
+        await AsyncStorage.setItem("userId", userId);
+
+        Alert.alert("Success", "User registered successfully.");
+        navigation.navigate("Main");
       }
-      const verifyResponseData = await verifyResponse.json();
-
-      const userId = verifyResponseData.userId;
-
-      await AsyncStorage.setItem('userToken', token);
-      await AsyncStorage.setItem('userId', userId);
-
-      Alert.alert("Success", "User registered successfully.");
-      navigation.navigate("Main");
     } catch (error) {
       Alert.alert("Error", "An error occurred. Please try again.");
       console.error("Error signing up:", error);

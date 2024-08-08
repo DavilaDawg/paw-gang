@@ -116,6 +116,7 @@ export const destroySession = async (
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users: User[] = await Model.find({}, { password: 0 });
+    console.log(users)
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
