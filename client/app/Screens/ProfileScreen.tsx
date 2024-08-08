@@ -5,6 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from '../Profile/ProfileHeader';
 import ProfileInfo from '../Profile/ProfileInfo';
 import ActionButtons from '../Profile/ActionButton';
+import { Local_IP } from '@env';
+
+const IP = Local_IP;
 
 type RootStackParams = {
   navigate(arg0: string): unknown;
@@ -38,15 +41,12 @@ const ProfileScreen: React.FC = () => {
       const token = await AsyncStorage.getItem('userToken');
       if (!token) throw new Error('No token found');
 
-      const response = await fetch(
-        `http://10.10.22.20:3000/sessions/${token}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch(`http://${IP}:3000/sessions/${token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
       const contentType = response.headers.get('Content-Type');
       if (contentType && contentType.includes('application/json')) {
@@ -82,7 +82,7 @@ const ProfileScreen: React.FC = () => {
       const userId = await AsyncStorage.getItem('userId');
       if (!userId) throw new Error('No token found');
 
-      const response = await fetch(`http://10.10.22.20:3000/users/${userId}`, {
+      const response = await fetch(`http://${IP}:3000/users/${userId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
