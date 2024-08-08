@@ -1,20 +1,6 @@
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-interface SessionProps {
-  // move into types!!
-  email: string;
-  password: string;
-}
-
-interface VerifyProps {
-  token: string;
-}
-
-interface User {
-  userId: string;
-  password: number; //???
-}
+import { SessionProps, VerifyProps, User } from "../Types/types";
 
 export const createSession = async ({
   email,
@@ -116,5 +102,3 @@ export const addUserToDB = async ({
   }
   return "success";
 };
-
-

@@ -31,3 +31,17 @@ export type RootStackParams = {
   SignUp: undefined;
   Main: undefined;
 };
+
+export type SessionProps = {
+  email: string;
+  password: string;
+};
+
+export type VerifyProps = {
+  token: string;
+};
+
+export type User = {
+  userId: string;
+  password: number;
+};
