@@ -20,13 +20,12 @@ router.delete("/events/:_id", deleteEvent);
 router.put("/events/:_id", editEvent);
 
 router.get("/users", getUsers) 
-
-router.post("/users", signUp)
 router.get("/users/:token", getUser) 
+router.post("/users", signUp)
 router.delete("/users/:userId", deleteUser)
 
-router.post("/sessions", createSession); // login
-router.get("/sessions/:token", getSession); // verify token
-router.post("/sessions/:token", destroySession); // logout
+router.post("/sessions", createSession); 
+router.get("/sessions/:token", getSession); 
+router.post("/sessions/:token", destroySession);
 
 export default router;
