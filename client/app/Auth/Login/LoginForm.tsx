@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import { RootStackParams } from "../../Types/types";
 import { StackNavigationProp } from "@react-navigation/stack";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createSession } from "../../services/authService";
 
 interface LoginFormProps {
   form: { email: string; password: string };
@@ -22,22 +23,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ form, setForm, navigation }) => {
     }
 
     try {
-      const response = await fetch("http://10.10.22.20:3000/sessions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        Alert.alert("Error", errorData.error || "Login failed.");
-        return;
-      }
-
-      const responseData = await response.json();
-      const token = responseData.token;
+      const token = await createSession({ email, password });
 
       const verifyResponse = await fetch(
         `http://10.10.22.20:3000/sessions/${token}`
@@ -51,8 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ form, setForm, navigation }) => {
 
       const userId = verifyResponseData.userId;
 
-      await AsyncStorage.setItem('userToken', token);
-      await AsyncStorage.setItem('userId', userId);
+      await AsyncStorage.setItem("userId", userId);
 
       navigation.navigate("Main");
     } catch (error) {
