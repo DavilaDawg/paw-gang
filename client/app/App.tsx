@@ -10,6 +10,7 @@ import LoginScreen from './Screens/LoginScreen';
 import ProfileScreen from './Screens/ProfileScreen';
 import React from 'react';
 import SignUpScreen from './Screens/SignUpScreen';
+import MapScreen from './Screens/MapScreen';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -95,6 +96,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
         <Stack.Screen name="Main" component={MainTabs} />
+        <Stack.Screen name="MapScreen" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

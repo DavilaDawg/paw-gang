@@ -13,10 +13,10 @@ interface ProfileInfoProps {
   userId: string | null;
 }
 
-const ProfileInfo: React.FC<ProfileInfoProps> = ({userId}) => (
+const ProfileInfo: React.FC<ProfileInfoProps> = ({ userId }) => (
   <View className="flex-1 justify-center items-center">
     <Image
-      source={require('../../assets/avatar-Luffy.png')}
+      source={profiles[0].avatar}
       className="w-52 h-52 rounded-full border-2 border-white mb-5"
     />
     <Text className="text-white font-bold text-xl mb-2">
