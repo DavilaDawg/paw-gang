@@ -31,27 +31,17 @@ const SignUpScreen: React.FC<SignUpProps> = ({ navigation }) => {
     confirmPassword: ''
   });
 
-  const handleSignUp = () => {
-    navigation.replace('Main');
-  };
-
   const handleLogin = () => {
     navigation.navigate('Login');
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
-      <ScrollView className="flex-1">
-        <View className="py-6 px-0 flex-1">
-          <SignUpLogo />
-          <SignUpForm
-            form={form}
-            setForm={setForm}
-            handleSignUp={handleSignUp}
-          />
-          <LoginPrompt handleLogin={handleLogin} />
-        </View>
-      </ScrollView>
+      <View className="py-6 px-0 flex-1">
+        <SignUpLogo />
+        <SignUpForm form={form} setForm={setForm} navigation={navigation} />
+        <LoginPrompt handleLogin={handleLogin} />
+      </View>
     </SafeAreaView>
   );
 };

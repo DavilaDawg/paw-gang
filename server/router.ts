@@ -8,6 +8,8 @@ const {
   editEvent,
 } = require("./controllers/eventController");
 
+const { getUsers, signUp, createSession, getSession, destroySession, getUser, deleteUser } = require("./controllers/authController")
+
 const router = express.Router();
 
 router.get("/events/", getEvents);
@@ -17,6 +19,14 @@ router.post("/events", postEvents);
 router.delete("/events/:_id", deleteEvent);
 router.put("/events/:_id", editEvent);
 
-router.post("/users/:user")
+router.get("/users", getUsers) 
+
+router.post("/users", signUp)
+router.get("/users/:token", getUser) 
+router.delete("/users/:userId", deleteUser)
+
+router.post("/sessions", createSession); // login
+router.get("/sessions/:token", getSession); // verify token
+router.post("/sessions/:token", destroySession); // logout
 
 export default router;

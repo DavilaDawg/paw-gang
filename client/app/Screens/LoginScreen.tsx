@@ -21,27 +21,17 @@ interface LoginProps {
 const LoginScreen: React.FC<LoginProps> = ({ navigation }) => {
   const [form, setForm] = useState({ email: '', password: '' });
 
-  const handleSignIn = () => {
-    navigation.replace('Main');
-  };
-
   const handleSignUp = () => {
     navigation.navigate('SignUp');
   };
 
   return (
     <SafeAreaView className="flex-1 bg-[#cfcec9]">
-      <ScrollView className="flex-1">
-        <View className="py-6 px-0 flex-1">
-          <LoginLogo />
-          <LoginForm
-            form={form}
-            setForm={setForm}
-            handleSignIn={handleSignIn}
-          />
-          <SignUpPrompt handleSignUp={handleSignUp} />
-        </View>
-      </ScrollView>
+      <View className="py-6 px-0 flex-1">
+        <LoginLogo />
+        <LoginForm form={form} setForm={setForm} navigation={navigation} />
+        <SignUpPrompt handleSignUp={handleSignUp} />
+      </View>
     </SafeAreaView>
   );
 };
