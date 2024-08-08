@@ -96,3 +96,23 @@ export const checkUsers = async (): Promise<User[] | null> => {
     return null;
   }
 };
+
+export const addUserToDB = async ({
+  email,
+  password,
+}: SessionProps): Promise<string | null> => {
+  const response2 = await fetch("http://10.10.22.20:3000/users", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userId: email, password }),
+  });
+
+  if (!response2.ok) {
+    const errorData = await response2.json();
+    Alert.alert("Error", errorData.error || "Sign-up failed.");
+    return null;
+  }
+  return "success";
+};
